@@ -10,7 +10,7 @@ services:
 before_script:
   - psql -c 'create database kids_krafts_test;' -U postgres
 script:
-  - coverage run --omit /site-packages/ -m unittest discover tests
+  - coverage run --omit */site-packages/* -m unittest discover tests
   - coverage report
 after_success:
   - coveralls
