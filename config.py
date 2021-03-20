@@ -5,7 +5,7 @@ class DevConfig(object):
     SQLALCHEMY_ECHO = True
 
 class TestConfig(object):
-    DEBUG = True
+    DEBUG = False
     SQLALCHEMY_DATABASE_URI = 'postgresql:///kids_krafts_test'
     SQLALCHEMY_ECHO = False
     TESTING = True
