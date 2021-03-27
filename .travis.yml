@@ -5,6 +5,10 @@ install:
   - pip install -r requirements.txt
   - pip install coverage
   - pip install coveralls
+env:
+  - secret_key=$secret_key
+  - seller_email=$seller_email
+  - seller_password = $seller_password
 services:
   - postgresql
 before_script:

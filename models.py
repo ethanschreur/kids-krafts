@@ -11,13 +11,6 @@ def connect_db(app):
     db.init_app(app)
 
 
-class Seller(db.Model):
-    __tablename__ = "sellers"
-    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    email = db.Column(db.Text, nullable = False, unique = True)
-    password = db.Column(db.Text, nullable = False)
-
-
 class Product(db.Model):
     __tablename__ = "products"
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)

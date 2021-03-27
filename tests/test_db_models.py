@@ -1,6 +1,6 @@
 from unittest import TestCase
 from app import create_app
-from models import db, Order, Purchase, Product, Subproduct, Seller
+from models import db, Order, Purchase, Product, Subproduct
 import datetime
 
 class ModelsTestCase(TestCase):
@@ -11,12 +11,6 @@ class ModelsTestCase(TestCase):
         # delete and create tables
         db.drop_all()
         db.create_all()
-
-        # add a seller row
-        self.EMAIL = "KidsKrafts4U@gmail.com"
-        new_seller = Seller(email = self.EMAIL, password = '1234')
-        db.session.add(new_seller)
-        db.session.commit()
 
         # add a product row and subproducts for that product
         craft1 = {'name': "Punxsutawney Phil", 'image_url': "../static/seed_images/kit_1/punxsutawney_phil.jpg"}
@@ -47,12 +41,6 @@ class ModelsTestCase(TestCase):
 
     def tearDown(self):
         db.session.rollback()
-
-    def test_seller_row(self):
-        # test the row for the added seller
-        u = Seller.query.filter_by(email = self.EMAIL).first()
-        self.assertEqual(u.email, self.EMAIL)
-        self.assertEqual(u.password, '1234')
 
     def test_product_row(self):
         # test the row for the added seller
