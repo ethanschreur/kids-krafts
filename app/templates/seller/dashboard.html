@@ -1,0 +1,15 @@
+{% extends 'seller/seller_base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<center>
+    <h1 class="mt-5">Seller Dashboard</h1>
+</center>
+<div class="container d-flex justify-content-center">
+    <span class="d-inline d-lg-none mt-3">
+        <a class="m-3 btn btn-md btn-success text-black" href="/products">Products</a>
+        <a class="m-3 btn btn-md btn-success text-black" href="/orders">Orders</a>
+    </span>
+</div>
+{% endblock %}
