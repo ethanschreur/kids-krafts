@@ -2,6 +2,10 @@ html {
 	overflow-y: scroll;
 }
 
+body {
+	background-color: #eceff1;
+}
+
 .side {
 	height: 99vh;
 	display: flex;
@@ -60,4 +64,27 @@ html {
 	background-position: left;
 	background-image: url("../static/images/first_logo.png");
 	border-radius: 50%;
+}
+
+.add-product {
+	height: 100%;
+}
+
+.view-products {
+	height: 100%;
+}
+
+.add-product-container,
+.view-products-container {
+	display: flex-inline;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	background-color: white;
+	margin: 20px;
+}
+
+.prod-img {
+	width: 100px;
+	height: 100px;
 }

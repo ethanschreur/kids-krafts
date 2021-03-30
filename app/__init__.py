@@ -1,7 +1,7 @@
 """Initializes the flask app."""
-from flask import Flask, render_template, redirect, session
+from flask import Flask, render_template, redirect, session, request
 from forms import LoginForm
-from models import connect_db
+from models import connect_db, Product, db
 from config import app_config
 import os
 
@@ -37,4 +37,26 @@ def logout():
 def get_dashboard():
     if ("seller_email" not in session):
         return redirect('/login')
-    return render_template('seller/dashboard.html')
+    return render_template('seller/dashboard.html') 
+
+@app.route('/products', methods=['GET'])
+def products():
+    if ("seller_email" not in session):
+        return redirect('/login')
+    products = Product.query.all()
+    print(products)
+    return render_template('seller/products.html', products=products)
+
+@app.route('/products', methods=['POST'])
+def add_product():
+    if ("seller_email" not in session):
+        return redirect('/login')
+    print(request.form)
+    new_product = Product(
+        name=request.form['product_name'],
+        price=float(request.form['product_price']),
+        image_url=request.form['product_image'],
+        category=request.form["product_selling_status"])
+    db.session.add(new_product)
+    db.session.commit()
+    return redirect('/products') 
