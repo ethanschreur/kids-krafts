@@ -34,11 +34,11 @@ html {
 	}
 }
 
-label,
-input {
+.login-inputs {
 	width: 400px;
 	height: 40px;
 }
+
 #big-logo {
 	margin-bottom: 30px;
 	max-width: 100%;
