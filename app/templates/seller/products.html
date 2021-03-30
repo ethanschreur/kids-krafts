@@ -1,0 +1,65 @@
+{% extends 'seller/seller_base.html' %}
+
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<div class="row container-fluid">
+    <div class="add-product col-lg-4 col-12">
+        <div class="p-3 add-product-container border rounded shadow-lg">
+        <center><h2>Add a Product</h2></center>
+    <form method="POST" action="/products">
+        <div class=form-group">
+            <label for="product-name">Name</label>
+            <input type="text" name="product_name" class="form-control" id="product-name" required placeholder="Product Name">
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="product-image">Image</label>
+            <input type="text" name="product_image" class="form-control" id="product-image" required placeholder="Image URL">
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="product-price">Price</label>
+            <input type="float" name="product_price" id="product-price" class="form-control" placeholder="9.99" required>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="product-selling-status">Selling Status</label>
+            <select id="product-selling-status" name="product_selling_status" class="form-control" required>
+                <option selected>Choose...</option>
+                <option>Selling</option>
+                <option>Not Selling</option>
+            </select>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+    </div>
+</div>
+    <div class="view-products col-lg-8 col-12">
+        <div class="p-3 view-products-container border rounded shadow-lg">
+            <center><h2>Products</h2></center>
+            <table class="table">
+                <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Image</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Selling Status</th>
+                    </tr>
+                  </thead>
+            {% for prod in products %}
+            <tbody>
+                  <tr>
+                    <td>{{prod.name}}</td>
+                    <td><img src="{{prod.image_url}}" class="prod-img"></img></td>
+                    <td>{{prod.price}}</td>
+                    <td>{{prod.category}}</td>
+                  </tr>
+              </tbody>
+            {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}  

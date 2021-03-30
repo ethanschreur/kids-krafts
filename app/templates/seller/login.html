@@ -20,7 +20,7 @@
                 <br>
                 {{ form.hidden_tag() }}
                     {% for field in form if field.widget.input_type != 'hidden' %}
-                        <p>
+                        <p class="login-inputs">
                             {{ field.label }}
                             <br>
                             {{  field }}
