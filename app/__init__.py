@@ -60,3 +60,24 @@ def add_product():
     db.session.add(new_product)
     db.session.commit()
     return redirect('/products') 
+
+@app.route('/products/<id>', methods=['GET'])
+def get_product(id):
+    if ("seller_email" not in session):
+        return redirect('/login')
+    product = Product.query.get_or_404(id)
+    return render_template('seller/product.html', prod = product)
+
+
+@app.route('/products/<id>', methods=['POST'])
+def update_product(id):
+    if ("seller_email" not in session):
+        return redirect('/login')
+    product = Product.query.get_or_404(id)
+    product.name = request.form['product_name']
+    product.price = request.form['product_price']
+    product.image_url = request.form['product_image']
+    product.category = request.form['product_selling_status']
+    db.session.add(product)
+    db.session.commit()
+    return redirect(f'/products/{id}')
