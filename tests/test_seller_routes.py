@@ -125,3 +125,18 @@ class SellerRoutesTestCase(TestCase):
             self.assertIn('Editted Name', resp.get_data(as_text=True))
             self.assertIn('999.99', resp.get_data(as_text=True))
             self.assertIn('editted link', resp.get_data(as_text=True))
+
+            # test deleting a product with seller_email not in the session
+            client.get('/logout')
+            resp = client.get('/products/2/delete', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Edit Product', resp.get_data(as_text=True))
+
+            # test deleting a product with seller_email in the sesison
+            client.post('/login', data={'email':os.environ.get('seller_email'), 'password':os.environ.get('seller_password')})
+            resp = client.get('/products/2/delete', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Add a Product', resp.get_data(as_text=True))
+            self.assertIn('<h2>Products</h2>', resp.get_data(as_text=True))
+            resp = client.get('/products/2', follow_redirects=True)
+            self.assertNotEqual(resp.status_code, 200)

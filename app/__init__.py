@@ -68,7 +68,6 @@ def get_product(id):
     product = Product.query.get_or_404(id)
     return render_template('seller/product.html', prod = product)
 
-
 @app.route('/products/<id>', methods=['POST'])
 def update_product(id):
     if ("seller_email" not in session):
@@ -81,3 +80,12 @@ def update_product(id):
     db.session.add(product)
     db.session.commit()
     return redirect(f'/products/{id}')
+
+@app.route('/products/<id>/delete', methods=['GET'])
+def delete_product(id):
+    if ("seller_email" not in session):
+        return redirect('/login')
+    product = Product.query.get(id)
+    db.session.delete(product)
+    db.session.commit()
+    return redirect('/products')
