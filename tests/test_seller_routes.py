@@ -93,3 +93,50 @@ class SellerRoutesTestCase(TestCase):
             self.assertIn('5.99', resp.get_data(as_text=True))
             self.assertIn('https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/16571', resp.get_data(as_text=True))
             self.assertIn('Not Selling', resp.get_data(as_text=True))  
+
+    def test_updating_products(self):
+        with self.client as client:
+            # test going to a product with seller_email not in the session
+            client.get('/logout')
+            resp = client.get('/products/1', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Edit Product', resp.get_data(as_text=True))
+
+            # test going to a product page with seller_email in the session
+            client.post('/login', data={'email':os.environ.get('seller_email'), 'password':os.environ.get('seller_password')})
+            resp = client.get('/products/1', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Edit Product', resp.get_data(as_text=True))
+
+            # # test editting a product with seller_email not in the session
+            client.get('/logout')
+            resp = client.post('/products/1', follow_redirects=True, data={'product_name': 'Editted Name', 'product_price': '999.99', 'product_image': 'editted link', 'product_selling_status': 'Selling'})
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Edit Product', resp.get_data(as_text=True))
+            self.assertNotIn('Editted Name', resp.get_data(as_text=True))
+            self.assertNotIn('999.99', resp.get_data(as_text=True))
+            self.assertNotIn('editted link', resp.get_data(as_text=True))
+
+            # test editting a product with seller_email in the session
+            client.post('/login', data={'email':os.environ.get('seller_email'), 'password':os.environ.get('seller_password')})
+            resp = client.post('/products/1', follow_redirects=True, data={'product_name': 'Editted Name', 'product_price': '999.99', 'product_image': 'editted link', 'product_selling_status': 'Selling'})
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Edit Product', resp.get_data(as_text=True))
+            self.assertIn('Editted Name', resp.get_data(as_text=True))
+            self.assertIn('999.99', resp.get_data(as_text=True))
+            self.assertIn('editted link', resp.get_data(as_text=True))
+
+            # test deleting a product with seller_email not in the session
+            client.get('/logout')
+            resp = client.get('/products/2/delete', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Edit Product', resp.get_data(as_text=True))
+
+            # test deleting a product with seller_email in the sesison
+            client.post('/login', data={'email':os.environ.get('seller_email'), 'password':os.environ.get('seller_password')})
+            resp = client.get('/products/2/delete', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Add a Product', resp.get_data(as_text=True))
+            self.assertIn('<h2>Products</h2>', resp.get_data(as_text=True))
+            resp = client.get('/products/2', follow_redirects=True)
+            self.assertNotEqual(resp.status_code, 200)

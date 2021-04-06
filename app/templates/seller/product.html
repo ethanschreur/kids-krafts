@@ -1,0 +1,75 @@
+{% extends 'seller/seller_base.html' %}
+
+{% block title %}{{prod.name}}{% endblock %}
+
+{% block content %}
+<div class="row container-fluid">
+    <div class="col-md-2 d-lg-none"></div>
+    <div class="mb-3 mb-4 view-product col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="p-3 m-3 view-product-container border rounded shadow-lg">
+            <div class="row">
+                <div class="col-sm-12 d-flex justify-content-center">
+                    <div>
+                    <center><h2 class="p-3">{{prod.name}}</h2></center>
+                    </div>
+                </div>
+                <div class="col-sm-12 d-flex justify-content-center">
+                    <div>
+                    <img src="{{prod.image_url}}" height="250" width="250">
+                    </div>
+                </div>
+                <div class="col-12 d-flex justify-content-center">
+                    <h3 class="mt-3">${{prod.price}}</h3><a class="mt-3 mx-3 btn btn-md btn-primary text-white" href="#">Buy</a>
+                </div>
+            </div>
+        </div>
+        <br>
+    </div>
+    <div class="col-md-2 d-lg-none"></div>    
+    <div class="edit-product col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-7">
+        <div class="row">
+            <div class="col-12 p-3 edit-product-container border rounded shadow-lg">
+            <center><h2>Edit Product</h2></center>
+            <form method="POST" action="/products/{{prod.id}}">
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label for="product-name">Name</label>
+                        <input type="text" name="product_name" class="form-control" id="product-name" required value="{{prod.name}}">
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="product-image">Image</label>
+                        <input type="text" name="product_image" class="form-control" id="product-image" required value="{{prod.image_url}}">
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="form-group col-6">
+                        <label for="product-price">Price</label>
+                        <input type="float" name="product_price" id="product-price" class="form-control" value={{prod.price}} required>
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="product-selling-status">Selling Status</label>
+                        <select id="product-selling-status" name="product_selling_status" class="form-control" required>
+                            <option>Choose...</option>
+                            {% if prod.category=="Selling" %}
+                            <option selected>Selling</option>
+                            {% else %}
+                            <option>Selling</option>
+                            {% endif %}
+                            {% if prod.category == "Not Selling" %}
+                            <option selected>Not Selling</option>
+                            {% else %}
+                            <option>Not Selling</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a href="/products/{{prod.id}}/delete" class="btn btn-danger mx-3">Delete</a>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}  

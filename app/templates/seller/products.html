@@ -50,12 +50,12 @@
                   </thead>
             {% for prod in products %}
             <tbody>
-                  <tr>
+                  <tr class="table-row" data-id="{{prod.id}}">
                     <td>{{prod.name}}</td>
                     <td><img src="{{prod.image_url}}" class="prod-img"></img></td>
                     <td>{{prod.price}}</td>
                     <td>{{prod.category}}</td>
-                  </tr>
+                </tr>
               </tbody>
             {% endfor %}
             </table>
