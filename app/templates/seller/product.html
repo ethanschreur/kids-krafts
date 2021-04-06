@@ -18,13 +18,36 @@
                     <img src="{{prod.image_url}}" height="250" width="250">
                     </div>
                 </div>
+                <div class="col-sm-12 d-md-5 d-flex" style="overflow: auto;">
+                    {% for sub in prod.subproducts %}
+                    <div class="d-flex flex-column align-items-center">
+                        <img class="m-3" src="{{sub.image_url}}" height="130" width="130">
+                        <span class="mb-3 mx-3">{{sub.name}}</span>
+                    </div>
+                    {% endfor %}
+                </div>
                 <div class="col-12 d-flex justify-content-center">
                     <h3 class="mt-3">${{prod.price}}</h3><a class="mt-3 mx-3 btn btn-md btn-primary text-white" href="#">Buy</a>
                 </div>
             </div>
         </div>
+        <br>
+        <div class="m-3 mt-0 p-3 add-subproduct-container border rounded shadow-lg d-none d-lg-block">
+        <center><h2>Add a Subproduct</h2></center>
+        <form class="" action="/products/{{prod.id}}/subproducts" method="POST">
+            <div class="col-12">
+                    <label for="subproduct-name">Name</label>
+                    <input type="text" name="subproduct_name" class="form-control" id="subproduct-name" placeholder="Name" required>
+                    <br>
+                    <label for="subproduct-image">Image URL</label>
+                    <input type="text" name="subproduct_image" class="form-control" id="subproduct-image" placeholder="Image URL" required>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+            </form>
+        </div>
     </div>
-    <div class="col-md-2 d-lg-none"></div>
+    <div class="col-md-2 d-lg-none"></div>    
     <div class="edit-product col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-7">
         <div class="row">
             <div class="col-12 p-3 edit-product-container border rounded shadow-lg">
@@ -65,7 +88,28 @@
                 </div>
                 <br>
                 <button type="submit" class="btn btn-primary">Save</button>
+                <a href="/products/{{prod.id}}/delete" class="btn btn-danger mx-3">Delete</a>
             </form>
             </div>
+            <div class="m-3 p-3 add-subproduct-container border rounded shadow-lg d-block d-lg-none">
+                <center><h2>Add a Subproduct</h2></center>
+                <form class="mt-3" action="/products/{{prod.id}}/subproducts" method="POST">
+                    <div class="row">
+                    <div class="col-6 col-lg-12">
+                            <label for="subproduct-name">Name</label>
+                            <input type="text" name="subproduct_name" class="form-control" id="subproduct-name" placeholder="Name" required>
+                    </div>
+                    <br>
+                    <div class="col-6 col-lg-12">
+                            <label for="subproduct-image">Image URL</label>
+                            <input type="text" name="subproduct_image" class="form-control" id="subproduct-image" placeholder="Image URL" required>
+                            </div><br>
+                </div>
+                            <button type="submit" class="mt-3 btn btn-primary">Add</button>
+
+                    </form>
+                </div>
+        </div>
+    </div>
 </div>
 {% endblock %} 

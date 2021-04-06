@@ -1,7 +1,7 @@
 """Initializes the flask app."""
 from flask import Flask, render_template, redirect, session, request
 from forms import LoginForm
-from models import connect_db, Product, db
+from models import connect_db, Product, db, Subproduct
 from config import app_config
 import os
 
@@ -44,14 +44,12 @@ def products():
     if ("seller_email" not in session):
         return redirect('/login')
     products = Product.query.all()
-    print(products)
     return render_template('seller/products.html', products=products)
 
 @app.route('/products', methods=['POST'])
 def add_product():
     if ("seller_email" not in session):
         return redirect('/login')
-    print(request.form)
     new_product = Product(
         name=request.form['product_name'],
         price=float(request.form['product_price']),
@@ -68,7 +66,6 @@ def get_product(id):
     product = Product.query.get_or_404(id)
     return render_template('seller/product.html', prod = product)
 
-
 @app.route('/products/<id>', methods=['POST'])
 def update_product(id):
     if ("seller_email" not in session):
@@ -79,5 +76,26 @@ def update_product(id):
     product.image_url = request.form['product_image']
     product.category = request.form['product_selling_status']
     db.session.add(product)
+    db.session.commit()
+    return redirect(f'/products/{id}')
+
+@app.route('/products/<id>/delete', methods=['GET'])
+def delete_product(id):
+    if ("seller_email" not in session):
+        return redirect('/login')
+    product = Product.query.get(id)
+    db.session.delete(product)
+    db.session.commit()
+    return redirect('/products')
+@app.route('/products/<id>/subproducts', methods=['POST'])
+def add_subproduct(id):
+    if ("seller_email" not in session):
+        return redirect('/login')
+    new_subproduct = Subproduct(
+        product_id = id,
+        name = request.form['subproduct_name'],
+        image_url = request.form['subproduct_image']
+    )
+    db.session.add(new_subproduct)
     db.session.commit()
     return redirect(f'/products/{id}')
