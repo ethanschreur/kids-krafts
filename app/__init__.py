@@ -57,7 +57,7 @@ def add_product():
         category=request.form["product_selling_status"])
     db.session.add(new_product)
     db.session.commit()
-    return redirect('/products') 
+    return redirect('/products')
 
 @app.route('/products/<id>', methods=['GET'])
 def get_product(id):
@@ -87,6 +87,7 @@ def delete_product(id):
     db.session.delete(product)
     db.session.commit()
     return redirect('/products')
+    
 @app.route('/products/<id>/subproducts', methods=['POST'])
 def add_subproduct(id):
     if ("seller_email" not in session):
@@ -97,5 +98,25 @@ def add_subproduct(id):
         image_url = request.form['subproduct_image']
     )
     db.session.add(new_subproduct)
+    db.session.commit()
+    return redirect(f'/products/{id}')
+
+@app.route('/products/<id>/subproducts/<sid>', methods=['POST'])
+def update_subproducts(id, sid):
+    if ("seller_email" not in session):
+        return redirect('/login')
+    subproduct = Subproduct.query.get(sid)
+    subproduct.name = request.form['subproduct_name']
+    subproduct.image_url = request.form['subproduct_image']
+    db.session.add(subproduct)
+    db.session.commit()
+    return redirect(f'/products/{id}')
+
+@app.route('/products/<id>/subproducts/<sid>/delete', methods=["GET"])
+def delete_subproduct(id, sid):
+    if ('seller_email' not in session):
+        return redirect('/login')
+    subproduct = Subproduct.query.get(sid)
+    db.session.delete(subproduct)
     db.session.commit()
     return redirect(f'/products/{id}')
