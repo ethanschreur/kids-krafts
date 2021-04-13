@@ -92,8 +92,8 @@ class SellerRoutesTestCase(TestCase):
             self.assertIn('Easter Kit', resp.get_data(as_text=True))
             self.assertIn('5.99', resp.get_data(as_text=True))
             self.assertIn('https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/16571', resp.get_data(as_text=True))
-            self.assertIn('Not Selling', resp.get_data(as_text=True))  
-        
+            self.assertIn('Not Selling', resp.get_data(as_text=True)) 
+
     def test_updating_products(self):
         with self.client as client:
             # test going to a product with seller_email not in the session
@@ -182,3 +182,19 @@ class SellerRoutesTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn('Editted Name', resp.get_data(as_text=True))
             self.assertIn('Editted Link', resp.get_data(as_text=True))
+
+            # test deleting a subproduct with seller_email not in the session
+            client.get('/logout')
+            resp = client.get('/products/3/subproducts/5/delete', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Edit Product', resp.get_data(as_text=True))
+            self.assertNotIn('Add a Subproduct', resp.get_data(as_text=True))
+            self.assertNotIn('Edit Subproducts', resp.get_data(as_text=True))
+
+
+            # test deleting a subproduct with seller_email in the session
+            client.post('/login', data={'email':os.environ.get('seller_email'), 'password':os.environ.get('seller_password')})
+            resp = client.get('/products/3/subproducts/5/delete', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Editted Name', resp.get_data(as_text=True))
+            self.assertNotIn('Editted Link', resp.get_data(as_text=True)) 
