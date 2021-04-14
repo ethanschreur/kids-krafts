@@ -3,7 +3,7 @@ html {
 }
 
 body {
-	background-color: #eceff1;
+	background-color: #cfd8dc;
 }
 
 .side {
@@ -52,18 +52,20 @@ body {
 	border-radius: 50%;
 	object-fit: contain;
 	background-position: center;
-	background-image: url("../static/images/first_logo.png");
+	background-size: cover;
+	background-image: url("../static/images/bluebird.png");
 }
 
 #small-logo {
 	width: 75px;
 	height: 75px;
-	max-width: 100%;
-	max-height: 100%;
+	max-width: 75px;
+	max-height: 75px;
 	object-fit: contain;
 	background-position: left;
-	background-image: url("../static/images/first_logo.png");
+	background-image: url("../static/images/bluebird.png");
 	border-radius: 50%;
+	background-size: cover;
 }
 
 .add-product {
@@ -114,4 +116,10 @@ body {
 	justify-content: center;
 	background-color: white;
 	margin: 20px;
+}
+
+.img-thumbnail {
+	width: 100%;
+	height: 300px;
+	overflow: hidden;
 }

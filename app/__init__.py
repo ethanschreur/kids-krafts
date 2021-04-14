@@ -4,8 +4,15 @@ from forms import LoginForm
 from models import connect_db, Product, db, Subproduct
 from config import app_config
 import os
+import random
 
 app = Flask(__name__, static_folder='../static',)
+
+@app.template_filter('shuffle')
+def filter_shuffle(seq):
+    result = list(seq)
+    random.shuffle(result)
+    return result
 
 def create_app(config_name):
     app.config.from_object(app_config[config_name])
@@ -120,3 +127,10 @@ def delete_subproduct(id, sid):
     db.session.delete(subproduct)
     db.session.commit()
     return redirect(f'/products/{id}')
+
+@app.route('/', methods=['GET'])
+def landing_page():
+    path = os.getcwd() + '/static/links.txt'
+    images_file = open(path, 'r')
+    images = images_file.readlines()
+    return render_template('/customer/landing.html', images=images)
