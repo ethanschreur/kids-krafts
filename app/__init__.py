@@ -134,3 +134,9 @@ def landing_page():
     images_file = open(path, 'r')
     images = images_file.readlines()
     return render_template('/customer/landing.html', images=images)
+
+@app.route('/shop')
+def shop_page():
+    products = Product.query.all()
+    print(products)
+    return render_template('/customer/shop.html', products = products)
