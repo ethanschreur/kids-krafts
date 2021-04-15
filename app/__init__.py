@@ -134,3 +134,35 @@ def landing_page():
     images_file = open(path, 'r')
     images = images_file.readlines()
     return render_template('/customer/landing.html', images=images)
+
+@app.route('/shop')
+def shop_page():
+    products = Product.query.all()
+    return render_template('/customer/shop.html', products = products, shop=True)
+
+@app.route('/cart', methods=['GET'])
+def cart_page():
+    if 'total' not in session:
+        session['total'] = 0
+    total = 0
+    for id in session['cart']:
+        total = total + session['cart'][id]['price']
+    session['total'] = total
+    return render_template('/customer/cart.html')
+
+@app.route('/cart', methods=['POST'])
+def add_to_cart():
+    if 'cart' not in session:
+        session['cart'] = {}
+    rows = session['cart']
+    rows[str(request.json['id'])] = {'name': request.json['name'], 'image': request.json['image'], 'price': request.json['price']}
+    session['cart'] = rows
+    return redirect('/shop')
+
+@app.route('/cart/remove', methods=['POST'])
+def remove_from_cart():
+    id = request.json['id']
+    cart = session['cart']
+    del cart[f'{id}']
+    session['cart'] = cart
+    return redirect('/cart')

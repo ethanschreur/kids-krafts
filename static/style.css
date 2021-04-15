@@ -123,3 +123,16 @@ body {
 	height: 300px;
 	overflow: hidden;
 }
+.preserve-breaks {
+	white-space: pre-wrap;
+}
+
+.facebook {
+	color: #3b5998;
+}
+
+.person {
+	width: 100px;
+	height: 100px;
+	border-radius: 15px;
+}

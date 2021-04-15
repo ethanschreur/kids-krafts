@@ -1,0 +1,36 @@
+{% extends 'customer/customer_base.html' %}
+
+{% block title %}Cart{% endblock %}
+
+{% block content %}
+<div class="container-fluid bg-white p-3" style="min-height: calc(100vh - 105px);">
+    <div class="p-3 d-flex align-items-center justify-content-center">
+        <div class="col-12 col-md-8 col-lg-8 col-xl-6">
+            <center class="my-5"><span class="p-3 h2 bg-white rounded"> 🛒 Your Cart </span></center>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col"><span>Item</span></th>
+                        <th scope="col"><span>Image</span></th>
+                        <th scope="col"><span>Amount</span></th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                <tbody id="your_cart_tbody">
+                {% for id in session['cart'] %}
+                    <tr data-id="{{id}}">
+                    <td><div class="my-3">{{session['cart'][id]['name']}}</div></td>
+                    <td> <img src="{{session['cart'][id]['image']}}" class="prod-img my-3"></img></td>
+                    <td class="amount-input">
+                    <input data-price="{{session['cart'][id]['price']}}" type="number" class="amount-input my-3 form-control h3" value="1" min="1" style="width: 75px;">
+                    </td>
+                    <td><a class="remove-from-cart btn btn-danger my-3" style="border-radius: 50%;"><i class="remove-from-cart fas fa-minus"></i></a></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <center><h5>Total: $<span id="total_cost">{{session['total']}}</span><span></span></h5></div></center>
+</div>
+{% endblock %}
