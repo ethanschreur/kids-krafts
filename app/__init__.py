@@ -1,10 +1,11 @@
 """Initializes the flask app."""
-from flask import Flask, render_template, redirect, session, request
-from forms import LoginForm
+from flask import Flask, render_template, redirect, session, request, flash
+from forms import LoginForm, ContactForm
 from models import connect_db, Product, db, Subproduct
 from config import app_config
 import os
 import random
+from flask_mail import Message, Mail
 
 app = Flask(__name__, static_folder='../static',)
 
@@ -138,5 +139,17 @@ def landing_page():
 @app.route('/shop')
 def shop_page():
     products = Product.query.all()
-    print(products)
     return render_template('/customer/shop.html', products = products)
+
+@app.route('/contact', methods = ['GET', 'POST'])
+def contact():
+    mail = Mail(app)
+    form = ContactForm()
+    if (form.validate_on_submit()):
+        msg = Message(form.subject.data, sender='kidskrafts4u@gmail.com', recipients=[
+            "%s" % (form.email.data)])
+        msg.html = render_template('/customer/contact_email.html', email = "%s" % (form.email.data), name = "%s" % (form.name.data), message = "%s" % (form.message.data))
+        mail.send(msg)
+        flash('Your message was successfully sent')
+        return redirect('/contact')
+    return render_template('/customer/contact.html', form = form)

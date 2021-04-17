@@ -10,6 +10,12 @@ class DevConfig(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = True
     SECRET_KEY = environ.get('secret_key')
+    MAIL_SERVER = "smtp.gmail.com"
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_USE_TLS = False
+    MAIL_USERNAME = 'kidskrafts4u@gmail.com'
+    MAIL_PASSWORD = environ.get('email_password')
 
 class TestConfig(object):
     DEBUG = False
@@ -18,11 +24,23 @@ class TestConfig(object):
     SQLALCHEMY_ECHO = False
     TESTING = True
     SECRET_KEY = environ.get('secret_key')
+    MAIL_SERVER = "smtp.gmail.com"
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_USE_TLS = False
+    MAIL_USERNAME = 'kidskrafts4u@gmail.com'
+    MAIL_PASSWORD = environ.get('email_password')
 
 class ProdConfig(object):
     DEBUG = False
     DATABASE_URL = ""
-
+    SECRET_KEY = environ.get('secret_key')
+    MAIL_SERVER = "smtp.gmail.com"
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_USE_TLS = False
+    MAIL_USERNAME = 'kidskrafts4u@gmail.com'
+    MAIL_PASSWORD = environ.get('email_password')
 
 app_config = {
     'DEFAULT': DevConfig,
