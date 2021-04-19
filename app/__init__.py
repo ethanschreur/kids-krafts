@@ -153,3 +153,7 @@ def contact():
         flash('Your message was successfully sent')
         return redirect('/contact')
     return render_template('/customer/contact.html', form = form)
+
+@app.route('/about')
+def about_page():
+    return render_template('/customer/about.html')

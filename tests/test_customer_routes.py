@@ -52,3 +52,12 @@ class SellerRoutesTestCase(TestCase):
             resp = client.post('/contact', data={'name': 'name', 'email': 'contact.kidskrafts4u@gmail.com', 'subject': 'Testing', 'message': 'This is a test.'}, follow_redirects=True)
             self.assertEqual(200, resp.status_code)
             self.assertIn('Your message was successfully sent', resp.get_data(as_text=True))
+    
+    def test_about_page(self):
+        with self.client as client:
+            resp = client.get('/about')
+            self.assertEqual(200, resp.status_code)
+            self.assertIn('Kendra Schreur', resp.get_data(as_text=True))
+            self.assertIn('Sharon Schreur', resp.get_data(as_text=True))
+            self.assertIn('About Us', resp.get_data(as_text=True))
+            self.assertIn('Social', resp.get_data(as_text=True))
