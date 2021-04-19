@@ -123,3 +123,6 @@ body {
 	height: 300px;
 	overflow: hidden;
 }
+.preserve-breaks {
+	white-space: pre-wrap;
+}

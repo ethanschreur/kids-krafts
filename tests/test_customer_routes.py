@@ -37,3 +37,18 @@ class SellerRoutesTestCase(TestCase):
 
             # display products with the category "Selling"
             self.assertIn('Selling', resp.get_data(as_text=True))
+
+    def test_contact_page(self):
+        with self.client as client:
+            # test the contact page
+            resp = client.get('/contact')
+            self.assertEqual(200, resp.status_code)
+            self.assertIn('Contact Us', resp.get_data(as_text=True))
+            self.assertIn('Name', resp.get_data(as_text=True))
+            self.assertIn('Email', resp.get_data(as_text=True))
+            self.assertIn('Subject', resp.get_data(as_text=True))
+            self.assertIn('Message', resp.get_data(as_text=True))
+            # test submitting the contact form
+            resp = client.post('/contact', data={'name': 'name', 'email': 'contact.kidskrafts4u@gmail.com', 'subject': 'Testing', 'message': 'This is a test.'}, follow_redirects=True)
+            self.assertEqual(200, resp.status_code)
+            self.assertIn('Your message was successfully sent', resp.get_data(as_text=True))
