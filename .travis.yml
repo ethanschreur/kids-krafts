@@ -8,7 +8,8 @@ install:
 env:
   - secret_key=$secret_key
   - seller_email=$seller_email
-  - seller_password = $seller_password
+  - seller_password=$seller_password
+  - email_password=$email_password
 services:
   - postgresql
 before_script:

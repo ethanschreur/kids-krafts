@@ -1,0 +1,41 @@
+{% extends 'customer/customer_base.html' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+  <div class="receiving-details bg-white container-fluid d-flex justify-content-center" style="min-height: calc(100vh - 105px);">
+    <div class="col-12 col-md-8 col-lg-8 col-xl-6">
+        <center><h2 class="my-5 text-3xl font-extrabold text-center text-gray-900 sm:text-4xl">🗨️ Contact Us </h2></center>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <center>
+            <div class="alert alert-success ml-3 mr-3 mb-3" role="alert">
+                {{ message }}
+            </div>
+            </center>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <form action="{{ url_for('contact') }}" method=post class="m-3">
+            <div class="form-group">
+                {{ form.hidden_tag() }}
+            
+                {{ form.name.label }}
+                {{ form.name(class="form-control") }}
+                <br>
+                {{ form.email.label }}
+                {{ form.email(class="form-control") }}
+                <br>
+                {{ form.subject.label }}
+                {{ form.subject(class="form-control") }}
+                <br>
+                {{ form.message.label }}
+                {{ form.message(class="form-control") }}
+            </div>
+            <br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
