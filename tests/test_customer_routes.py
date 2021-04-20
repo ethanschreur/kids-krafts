@@ -26,17 +26,40 @@ class SellerRoutesTestCase(TestCase):
             # add two products with subproducts, one with the category "Not Selling", the other with category "Selling"
             client.post('/login', data={'email':os.environ.get('seller_email'), 'password':os.environ.get('seller_password')})
             client.post('/products', follow_redirects=True, data=self.product_data_selling)
-            client.post('/products/1/subproducts', data=self.subproduct_data, follow_redirects=True)
             client.post('/products', follow_redirects=True, data=self.product_data_not_selling)
-            client.post('/products/1/subproducts', data=self.subproduct_data, follow_redirects=True)
             resp = client.get('/shop')
             self.assertEqual(200, resp.status_code)
-           
+        
             # dont display products with the category "Not Selling"
             self.assertNotIn('Not Selling', resp.get_data(as_text=True))
 
             # display products with the category "Selling"
             self.assertIn('Selling', resp.get_data(as_text=True))
+
+            # test what the product display looks like while the product data are not in session
+            resp = client.get('/shop')
+            self.assertEqual(200, resp.status_code)
+            self.assertNotIn('check', resp.get_data(as_text=True))
+
+            # test what the products display looks like while the product data are in session
+            with client.session_transaction() as session:
+                session['cart'] = {'1':{}}
+            resp = client.get('/shop')
+            self.assertEqual(200, resp.status_code)
+            self.assertIn('check', resp.get_data(as_text=True))
+
+    def test_cart_page(self):
+        with self.client as client:
+            with client.session_transaction() as session:
+                session['cart'] = {}
+            client.post('/cart', json={'id': '1', 'name': self.product_data_selling['product_name'], 'price': self.product_data_selling['product_price'], 'image': self.product_data_selling['product_image']}, content_type='application/json')
+            resp = client.get('/cart')
+            self.assertEqual(200, resp.status_code)
+            self.assertIn(self.product_data_selling['product_name'], resp.get_data(as_text=True))
+            client.post('/cart/remove', json={"id": '1'})
+            resp = client.get('/cart')
+            self.assertEqual(200, resp.status_code)
+            self.assertNotIn(self.product_data_selling['product_name'], resp.get_data(as_text=True))
 
     def test_contact_page(self):
         with self.client as client:

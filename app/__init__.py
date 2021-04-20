@@ -138,8 +138,10 @@ def landing_page():
 
 @app.route('/shop')
 def shop_page():
+    if 'cart' not in session:
+        session['cart'] = {}
     products = Product.query.all()
-    return render_template('/customer/shop.html', products = products)
+    return render_template('/customer/shop.html', products = products, shop=True)
 
 @app.route('/contact', methods = ['GET', 'POST'])
 def contact():
@@ -157,3 +159,28 @@ def contact():
 @app.route('/about')
 def about_page():
     return render_template('/customer/about.html')
+
+@app.route('/cart', methods=['GET'])
+def cart_page():
+    if 'total' not in session:
+        session['total'] = 0
+    total = 0
+    for id in session['cart']:
+        total = total + float(session['cart'][id]['price'])
+    session['total'] = total
+    return render_template('/customer/cart.html')
+
+@app.route('/cart', methods=['POST'])
+def add_to_cart():
+    rows = session['cart']
+    rows[str(request.json['id'])] = {'name': request.json['name'], 'image': request.json['image'], 'price': request.json['price']}
+    session['cart'] = rows
+    return redirect('/shop')
+
+@app.route('/cart/remove', methods=['POST'])
+def remove_from_cart():
+    id = request.json['id']
+    cart = session['cart']
+    del cart[f'{id}']
+    session['cart'] = cart
+    return redirect('/cart')

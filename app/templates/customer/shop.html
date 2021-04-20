@@ -3,9 +3,8 @@
 {% block title %}Shop{% endblock %}
 
 {% block content %}
-<div class="container-fluid">
     <div class="row justify-content-center">
-    {% for prod in products %}
+    {% for prod in products|reverse %}
         {% if prod.category == 'Selling' %}
         <div class="mb-3 view-product col-xs-12 col-sm-10 col-md-8 col-lg-6 col-xl-4">
             <div class="p-3 m-3 view-product-container border rounded shadow-lg">
@@ -28,8 +27,14 @@
                         </div>
                         {% endfor %}
                     </div>
-                    <div class="col-12 d-flex justify-content-center">
-                        <h3 class="mt-3">${{prod.price}}</h3><a class="mt-3 mx-3 btn btn-md btn-primary text-white" href="#">Buy</a>
+                    <div data-sect="purchase_sect" data-id="{{prod.id}}" data-name="{{prod.name}}" data-image="{{prod.image_url}}" data-price="{{prod.price}}" class="col-12 d-flex align-items-center justify-content-center">
+                        <h4 class="mt-3 mx-3">${{prod.price}}</h4>
+                        {% if session['cart'][prod.id|string] is not defined %}
+                        <a class="add-{{prod.id}} add-to-cart h6 mt-3 btn btn-md btn-primary text-white"><i class="fas fa-plus"></i>  <i class="fas fa-shopping-cart"></i></a>
+                        {% endif %}
+                        {% if session['cart'][prod.id|string] is defined %}
+                        <a class="add-{{prod.id}} add-to-cart h6 mt-3 btn btn-md btn-success text-white"><i class="fas fa-check"></i>  <i class="fas fa-shopping-cart"></i></a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -37,5 +42,4 @@
         {% endif %}
     {% endfor %}
     </div>
-</div>
-{% endblock %} 
+{% endblock %}
