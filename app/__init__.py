@@ -3,9 +3,14 @@ from flask import Flask, render_template, redirect, session, request, flash
 from forms import LoginForm, ContactForm
 from models import connect_db, Product, db, Subproduct
 from config import app_config
+from .helper import get_two_weeks_options, whichOption, get_last_week, get_first_week, get_new_first_week, get_new_last_week, get_next_month, get_prev_month, get_first_month, get_second_month, get_month_header
 import os
-import random
 from flask_mail import Message, Mail
+import random
+import calendar
+import datetime
+
+calendar.setfirstweekday(calendar.SUNDAY)
 
 app = Flask(__name__, static_folder='../static',)
 
@@ -138,8 +143,10 @@ def landing_page():
 
 @app.route('/shop')
 def shop_page():
+    if 'cart' not in session:
+        session['cart'] = {}
     products = Product.query.all()
-    return render_template('/customer/shop.html', products = products)
+    return render_template('/customer/shop.html', products = products, shop=True)
 
 @app.route('/contact', methods = ['GET', 'POST'])
 def contact():
@@ -157,3 +164,49 @@ def contact():
 @app.route('/about')
 def about_page():
     return render_template('/customer/about.html')
+
+@app.route('/cart', methods=['GET'])
+def cart_page():
+    if 'total' not in session:
+        session['total'] = 0
+    total = 0
+    for id in session['cart']:
+        total = total + float(session['cart'][id]['price'])
+    session['total'] = total
+    return render_template('/customer/cart.html', order_details=True)
+
+@app.route('/cart', methods=['POST'])
+def add_to_cart():
+    rows = session['cart']
+    rows[str(request.json['id'])] = {'name': request.json['name'], 'image': request.json['image'], 'price': request.json['price']}
+    session['cart'] = rows
+    return redirect('/shop')
+
+@app.route('/cart/remove', methods=['POST'])
+def remove_from_cart():
+    id = request.json['id']
+    cart = session['cart']
+    del cart[f'{id}']
+    session['cart'] = cart
+    return redirect('/cart')
+
+
+@app.route('/order_details')
+def order_details():
+    month = int(datetime.datetime.now().strftime('%m'))
+    year = int(datetime.datetime.now().strftime('%y'))
+    two_weeks_options = get_two_weeks_options(month, year)
+    today = datetime.datetime.now().day
+    which = whichOption(today, two_weeks_options)
+    last_week = get_last_week(which, two_weeks_options)
+    first_week = get_first_week(which, two_weeks_options)
+    last_week = get_new_last_week(last_week, which, two_weeks_options)
+    first_week = get_new_first_week(first_week, which, two_weeks_options)
+
+    prev_month = calendar.month_name[get_prev_month(month)]
+    curr_month = calendar.month_name[month]
+    next_month = calendar.month_name[get_next_month(month)]
+    month_header = get_month_header(which, prev_month, curr_month, next_month, last_week, first_week)
+    first_month = get_first_month(which, prev_month, curr_month)
+    second_month = get_second_month(which, curr_month, next_month)
+    return render_template('/customer/order_details.html', credit=True, month_header=month_header, first_month = first_month, second_month = second_month, last_week = last_week, first_week = first_week) 
