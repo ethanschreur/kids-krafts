@@ -69,3 +69,8 @@ $('#your_cart_tbody').change(function(evt) {
 		calcTotalCost();
 	}
 });
+
+$('.date-check').change(function(evt) {
+	$('.date-check').prop('checked', false);
+	$(evt.target).prop('checked', true);
+});

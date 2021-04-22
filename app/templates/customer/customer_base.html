@@ -24,7 +24,17 @@
             </a>
             {% if shop %}
             <ul class="mr-auto m-3 d-md-none">
-                <a href="/cart" class="add-to-cart btn btn-md btn-primary text-white"><i class="fas fa-arrow-right"></i> <i class="fas fa-shopping-cart"></i></a>
+                <a href="/cart" class="btn btn-md btn-primary text-white"><i class="fas fa-arrow-right"></i> <i class="fas fa-shopping-cart"></i></a>
+            </ul>  
+            {% endif %}
+            {% if order_details %}
+            <ul class="mr-auto m-3 d-md-none">
+                <a href="/order_details" class="btn btn-md btn-primary text-white"><i class="fas fa-arrow-right"></i> <i class="fas fa-box-open"></i></a>
+            </ul>  
+            {% endif %}
+            {% if credit %}
+            <ul class="mr-auto m-3 d-md-none">
+                <a href="/pay" class="btn btn-md btn-primary text-white"><i class="fas fa-arrow-right"></i> <i class="fas fa-credit-card"></i></a>
             </ul>  
             {% endif %}
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,12 +46,20 @@
                     <a class="m-3 my-3 btn btn-md btn-success text-white" href="/">Home</a>
                     <a class="m-3 my-3 btn btn-md btn-success text-white" href="/about">About</a>
                     <a class="m-3 btn btn-md btn-success text-white" href="/contact">Contact</a>
-                    {% if not shop %}
+                    {% if not shop and not order_details and not credit %}
                     <a class="m-3 btn btn-md btn-primary text-white" href="/shop">Shop</a>
                     {% endif %}
                     {% if shop %}
                     <a class="m-3 btn btn-md btn-primary text-white d-md-none" href="/shop">Shop</a>
                     <a class="m-3 btn btn-md btn-primary text-white d-none d-md-inline-block" href="/cart"><i class="fas fa-arrow-right d-none d-lg-inline-block"></i> <i class="fas fa-shopping-cart"></i></a>
+                    {% endif %}
+                    {% if order_details %}
+                    <a class="m-3 btn btn-md btn-primary text-white d-md-none" href="/shop">Shop</a>
+                    <a class="m-3 btn btn-md btn-primary text-white d-none d-md-inline-block" href="/order_details"><i class="fas fa-arrow-right"></i> <i class="fas fa-box-open"></i></a>
+                    {% endif %}
+                    {% if credit %}
+                    <a class="m-3 btn btn-md btn-primary text-white d-md-none" href="/cart"><i class="fas fa-arrow-left"></i> <i class="fas fa-shopping-cart"></i></a>
+                    <a class="m-3 btn btn-md btn-primary text-white d-none d-md-inline-block" href="/order_details"><i class="fas fa-arrow-right"></i> <i class="fas fa-credit-card"></i></a>
                     {% endif %}
                 </span>
             </ul></div>
