@@ -39,7 +39,7 @@ class Order(db.Model):
     stripe_order_id = db.Column(db.Text, nullable = False, unique = True)
     first_name = db.Column(db.Text, nullable = False)
     last_name = db.Column(db.Text, nullable = False)
-    date_time = db.Column(db.DateTime, nullable = False)
+    pickup_time = db.Column(db.Text, nullable = False)
     email = db.Column(db.Text, nullable = False)
     status = db.Column(db.Text, nullable = False)
     notes = db.Column(db.Text, nullable = False, default = "None")

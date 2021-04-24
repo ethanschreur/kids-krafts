@@ -10,6 +10,7 @@ env:
   - seller_email=$seller_email
   - seller_password=$seller_password
   - email_password=$email_password
+  - stripe_secret_key=$stripe_secret_key
 services:
   - postgresql
 before_script:

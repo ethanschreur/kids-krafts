@@ -1,0 +1,20 @@
+{% extends 'customer/customer_base.html' %}
+
+{% block title %}Success{% endblock %}
+
+{% block content %}
+<div class="receiving-details bg-white container-fluid d-flex justify-content-center" style="min-height: calc(100vh - 105px);">
+    <div class="col-12 col-md-8 col-lg-8 col-xl-6">
+        <center><h2 class="my-5 text-3xl font-extrabold text-center text-gray-900 sm:text-4xl">🥳 Success</h2></center>
+        <li class="list-group-item">Hooray! We've received your order.</li>
+        <li class="list-group-item">An email has been sent to {{email}} with confirmation of your purchase.</li>
+        <li class="list-group-item">Your kits will be ready for pickup on {{day}} between {{time}}.</li>
+        <li class="list-group-item">The pickup location is in <a href="https://www.google.com/maps/place/3160+Hillside+Ct,+Zeeland,+MI+49464/@42.8259657,-86.0366443,17z/data=!3m1!4b1!4m5!3m4!1s0x8819930d12731d75:0xe585f95c5c9455ef!8m2!3d42.8259657!4d-86.0344556" target="_blank">Zeeland, Michigan</a>.</li>
+        
+        <center><h2 class="my-5 text-3xl font-extrabold text-center text-gray-900 sm:text-4xl">Pickup <span class="h1">🚗</span></h2></center>
+        <li class="list-group-item">When you arrive at the pickup location, you will find a tub with orders in them. Your order will have your name on it.</li>
+        <li class="list-group-item">If the weather is too poor to use the tub, knock on the door and we'll get you your order.</li>
+    <center><img class="tub my-5" src="https://images.costcobusinessdelivery.com/ImageDelivery/imageService?profileId=12028466&itemId=718262&recipeName=680" alt=""></center>
+    </div>
+</div>
+{% endblock %}
