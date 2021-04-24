@@ -1,0 +1,69 @@
+
+name: Kids Krafts
+
+on:
+  push:
+    branches: [ '*' ]
+
+jobs:
+  built:
+    container: gradle:jdk11
+
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres:13
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+ 
+    runs-on: ubuntu-latest
+
+    env: 
+        secret_key: ${{ secrets.SECRET_KEY }}
+        seller_email: ${{ secrets.SELLER_EMAIL }}
+        seller_password: ${{ secrets.SELLER_PASSWORD }}
+        email_password: ${{ secrets.EMAIL_PASSWORD }}
+        stripe_secret_key: ${{ secrets.STRIPE_SECRET_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        github-token: ${{ secrets.github_token }}
+
+    steps:
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.9"
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install coverage
+        pip install coveralls
+
+    - name: Use postgresql client
+      run: |
+        apt-get update
+        apt-get install --yes --no-install-recommends postgresql-client
+
+    - name: Create database
+      run: |
+        PGPASSWORD=postgres psql -c 'create database kids_krafts_test;' -U postgres -h postgres
+
+    - name: Run coveralls
+      run: |
+        coverage run --omit */site-packages/* -m unittest discover tests
+        coverage report
+        coveralls --service=github
