@@ -72,12 +72,14 @@ body {
 	height: 100%;
 }
 
-.view-products {
+.view-products,
+.view-orders {
 	height: 100%;
 }
 
 .add-product-container,
-.view-products-container {
+.view-products-container,
+.view-orders-container {
 	display: flex-inline;
 	flex-direction: column;
 	align-items: center;
@@ -134,5 +136,11 @@ body {
 .person {
 	width: 100px;
 	height: 100px;
+	border-radius: 15px;
+}
+
+.tub {
+	width: 200px;
+	height: 200px;
 	border-radius: 15px;
 }
