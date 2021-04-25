@@ -249,7 +249,7 @@ def pay():
             'product_data': {
             'name': session['cart'][id]['name'],
             },
-            'unit_amount': round(session['cart'][id]['price']*100),
+            'unit_amount': round(float(session['cart'][id]['price'])*100),
         },
         'quantity': session['cart'][id]['amount'],
         });
