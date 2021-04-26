@@ -7,7 +7,7 @@ $('.table-row').click(function(evt) {
 		id = $(firstParent).parent().data().id;
 	}
 	if ($(firstParent).data().type === 'order') {
-		// window.location.href = `/orders/${id}`;
+		window.location.href = `/orders/${id}`;
 	} else {
 		window.location.href = `/products/${id}`;
 	}
