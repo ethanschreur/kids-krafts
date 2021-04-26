@@ -21,8 +21,8 @@
                     <tr data-id="{{id}}">
                     <td><div class="my-3">{{session['cart'][id]['name']}}</div></td>
                     <td> <img src="{{session['cart'][id]['image']}}" class="prod-img my-3"></img></td>
-                    <td class="amount-input">
-                    <input data-price="{{session['cart'][id]['price']}}" type="number" class="amount-input my-3 form-control h3" value="1" min="1" style="width: 75px;">
+                    <td class="amount-input" data-id="{{id}}">
+                    <input data-id="{{id}}" data-price="{{session['cart'][id]['price']}}" type="number" class="amount-input my-3 form-control h3" value="{{session['cart'][id]['amount']}}" min="1" style="width: 75px;">
                     </td>
                     <td><a class="remove-from-cart btn btn-danger my-3" style="border-radius: 50%;"><i class="remove-from-cart fas fa-minus"></i></a></td>
                     </tr>
@@ -31,6 +31,12 @@
             </table>
         </div>
     </div>
-    <center><h5>Total: $<span id="total_cost">{{session['total']}}</span><span></span></h5></div></center>
+     <div class="p-3 d-flex align-items-center justify-content-center">
+        <center><h5>Total: $<span id="total_cost">{{session['total']|round(2)}}</span><span></span></h5></div></center>
+        <center>
+            <a class="m-3 btn btn-lg btn-primary text-white" href="/order_details">Order <i class="fas fa-box-open"></i></a>
+        </center>
+    </div>
 </div>
+
 {% endblock %}
