@@ -36,7 +36,7 @@ class Subproduct(db.Model):
 class Order(db.Model):
     __tablename__ = "orders"
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    stripe_order_id = db.Column(db.Text, nullable = False, unique = True)
+    stripe_order_id = db.Column(db.Text, nullable = False)
     name = db.Column(db.Text, nullable = False)
     pickup_time = db.Column(db.Text, nullable = False)
     email = db.Column(db.Text, nullable = False)

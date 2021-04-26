@@ -312,3 +312,23 @@ def orders():
         return redirect('/login')
     orders = Order.query.all()
     return render_template('seller/orders.html', orders=orders)
+
+@app.route('/orders', methods=['POST'])
+def add_order():
+    if ("seller_email" not in session):
+        return redirect('/login')
+    notes = 'None'
+    if (request.form['order_notes'] != ''):
+        notes = request.form['order_notes']
+    new_order = Order(
+        stripe_order_id="none",
+        name=request.form['order_name'],
+        pickup_time=request.form['order_pickup_time'],
+        email=request.form['order_email'],
+        status="ordered",
+        payment_type="not stripe",
+        payment_status="not paid",
+        notes=notes)
+    db.session.add(new_order)
+    db.session.commit()
+    return redirect('/orders')
