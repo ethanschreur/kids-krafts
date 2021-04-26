@@ -1,6 +1,7 @@
 from unittest import TestCase
 from app import create_app
 import os
+import json
 
 class SellerRoutesTestCase(TestCase):
     def setUp(self):
@@ -124,3 +125,15 @@ class SellerRoutesTestCase(TestCase):
             self.assertIn('Order Details', resp.get_data(as_text=True))
             self.assertIn('Choose a Pickup Time', resp.get_data(as_text=True))
             self.assertIn('Pay', resp.get_data(as_text=True))
+
+    def test_payment_process_and_success_page(self):
+        with self.client as client:
+            with client.session_transaction() as session:
+                session['cart'] = {}
+            client.post('/cart', json={'id': '1', 'name': self.product_data_selling['product_name'], 'price': self.product_data_selling['product_price'], 'image': self.product_data_selling['product_image']}, content_type='application/json')
+            resp = client.get('/cart')
+            resp = client.post('/create-checkout-session', json={'pickup': '25 AM', 'month': 'April'})
+            session_id = (json.loads(resp.get_data())['id'])
+            self.assertEqual(type(json.loads(resp.get_data())['id']), str)
+            resp = client.get(f'/success?{session_id}')
+            self.assertEqual(302, resp.status_code)

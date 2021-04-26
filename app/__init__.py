@@ -250,7 +250,7 @@ def pay():
             'product_data': {
             'name': session['cart'][id]['name'],
             },
-            'unit_amount': round(session['cart'][id]['price']*100),
+            'unit_amount': round(float(session['cart'][id]['price'])*100),
         },
         'quantity': session['cart'][id]['amount'],
         });
@@ -338,7 +338,11 @@ def get_order(id):
     if ("seller_email" not in session):
         return redirect('/login')
     order = Order.query.get_or_404(id)
-    return render_template('seller/order.html', order = order)
+    products = Product.query.all()
+    prod_info = {}
+    for prod in products:
+        prod_info[prod.id] = [prod.name, prod.image_url]
+    return render_template('seller/order.html', order = order, products=products, prod_info=prod_info)
 
 @app.route('/orders/<id>', methods=['POST'])
 def update_order(id):
@@ -365,3 +369,17 @@ def delete_order(id):
     db.session.delete(order)
     db.session.commit()
     return redirect('/orders')
+
+@app.route('/orders/<id>/purchases', methods=['POST'])
+def add_purchase(id):
+    if ("seller_email" not in session):
+        return redirect('/login')
+    new_purchase = Purchase(
+        order_id = id,
+        product_id = request.form['product_id'],
+        number_ordered = request.form['number_ordered'],
+        number_made = 0
+    )
+    db.session.add(new_purchase)
+    db.session.commit()
+    return redirect(f'/orders/{id}')
