@@ -16,6 +16,7 @@ class DevConfig(object):
     MAIL_USE_TLS = False
     MAIL_USERNAME = 'kidskrafts4u@gmail.com'
     MAIL_PASSWORD = environ.get('email_password')
+    STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
 
 class TestConfig(object):
     DEBUG = False
@@ -30,6 +31,7 @@ class TestConfig(object):
     MAIL_USE_TLS = False
     MAIL_USERNAME = 'kidskrafts4u@gmail.com'
     MAIL_PASSWORD = environ.get('email_password')
+    STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
 
 class ProdConfig(object):
     DEBUG = False
@@ -41,6 +43,7 @@ class ProdConfig(object):
     MAIL_USE_TLS = False
     MAIL_USERNAME = 'kidskrafts4u@gmail.com'
     MAIL_PASSWORD = environ.get('email_password')
+    STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
 
 app_config = {
     'DEFAULT': DevConfig,
