@@ -1,11 +1,17 @@
 """Initializes the flask app."""
-from flask import Flask, render_template, redirect, session, request, flash
+from flask import Flask, render_template, redirect, session, request, flash, jsonify, url_for
 from forms import LoginForm, ContactForm
-from models import connect_db, Product, db, Subproduct
+from models import connect_db, Product, db, Subproduct, Order, Purchase
 from config import app_config
+from .helper import get_two_weeks_options, whichOption, get_last_week, get_first_week, get_new_first_week, get_new_last_week, get_next_month, get_prev_month, get_first_month, get_second_month, get_month_header
 import os
-import random
 from flask_mail import Message, Mail
+import random
+import calendar
+import datetime
+import stripe
+
+calendar.setfirstweekday(calendar.SUNDAY)
 
 app = Flask(__name__, static_folder='../static',)
 
@@ -134,6 +140,7 @@ def landing_page():
     path = os.getcwd() + '/static/links.txt'
     images_file = open(path, 'r')
     images = images_file.readlines()
+    images_file.close()
     return render_template('/customer/landing.html', images=images)
 
 @app.route('/shop')
@@ -147,6 +154,22 @@ def shop_page():
 def contact():
     mail = Mail(app)
     form = ContactForm()
+    if 'cart' not in session:
+        session['cart'] = {}
+    if 'total' not in session:
+        session['total'] = 0
+    if(request.args.get('shipping') == 'true' and session['cart'] != {} and session['total'] != 0):
+        order = []
+        for id in session['cart']:
+            prod = []
+            prod.append(session['cart'][id]['name'])
+            prod.append(session['cart'][id]['amount'])
+            order.append(prod)
+        form.message.data = f"""Order: {str(order)[1:-1]}
+Total: ${session['total']} (before shipping)
+Shipping Address:
+Notes:"""
+        form.subject.data = "Shipping Request"
     if (form.validate_on_submit()):
         msg = Message(form.subject.data, sender='kidskrafts4u@gmail.com', recipients=[
             "%s" % (form.email.data)])
@@ -166,14 +189,14 @@ def cart_page():
         session['total'] = 0
     total = 0
     for id in session['cart']:
-        total = total + float(session['cart'][id]['price'])
-    session['total'] = total
-    return render_template('/customer/cart.html')
+        total = total + (float(session['cart'][id]['price']) * float(session['cart'][id]['amount']))
+    session['total'] = round(total, 2)
+    return render_template('/customer/cart.html', order_details=True)
 
 @app.route('/cart', methods=['POST'])
 def add_to_cart():
     rows = session['cart']
-    rows[str(request.json['id'])] = {'name': request.json['name'], 'image': request.json['image'], 'price': request.json['price']}
+    rows[str(request.json['id'])] = {'name': request.json['name'], 'image': request.json['image'], 'price': request.json['price'], 'amount': 1}
     session['cart'] = rows
     return redirect('/shop')
 
@@ -184,3 +207,152 @@ def remove_from_cart():
     del cart[f'{id}']
     session['cart'] = cart
     return redirect('/cart')
+
+@app.route('/cart/amount', methods=['POST'])
+def change_amount():
+    id = request.json['id']
+    amount = request.json['amount']
+    cart = session['cart']
+    cart[f"{id}"]['amount'] = amount
+    session['cart']=cart
+    return redirect('/cart')
+
+@app.route('/order_details')
+def order_details():
+    month = int(datetime.datetime.now().strftime('%m'))
+    year = int(datetime.datetime.now().strftime('%y'))
+    two_weeks_options = get_two_weeks_options(month, year)
+    today = datetime.datetime.now().day
+    which = whichOption(today, two_weeks_options)
+    last_week = get_last_week(which, two_weeks_options)
+    first_week = get_first_week(which, two_weeks_options)
+    last_week = get_new_last_week(last_week, which, two_weeks_options)
+    first_week = get_new_first_week(first_week, which, two_weeks_options)
+
+    prev_month = calendar.month_name[get_prev_month(month)]
+    curr_month = calendar.month_name[month]
+    next_month = calendar.month_name[get_next_month(month)]
+    month_header = get_month_header(which, prev_month, curr_month, next_month, last_week, first_week)
+    first_month = get_first_month(which, prev_month, curr_month)
+    second_month = get_second_month(which, curr_month, next_month)
+    return render_template('/customer/order_details.html', credit=True, month_header=month_header, first_month = first_month, second_month = second_month, last_week = last_week, first_week = first_week)
+
+@app.route('/create-checkout-session', methods=['POST'])
+def pay():
+    pickup = request.json['pickup']
+    month = request.json['month']
+    session['datetime'] = month + ' ' + pickup
+    items = []
+    for id in session['cart']:
+        items.append({
+        'price_data': {
+            'currency': 'usd',
+            'product_data': {
+            'name': session['cart'][id]['name'],
+            },
+            'unit_amount': round(session['cart'][id]['price']*100),
+        },
+        'quantity': session['cart'][id]['amount'],
+        });
+    stripe.api_key = app.config['STRIPE_SECRET_KEY']
+    stripe_session = stripe.checkout.Session.create(
+    payment_method_types=['card'],
+    line_items=items,
+    mode='payment',
+    success_url = url_for('success', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
+    cancel_url = url_for('order_details', _external=True),
+    )
+    return jsonify(id=stripe_session.id)
+
+@app.route('/success')
+   # display order and pickup information, remove cart from session.
+def success():
+    try:
+        stripe.api_key = app.config['STRIPE_SECRET_KEY']
+        stripe_session = stripe.checkout.Session.retrieve(request.args.get('session_id'))
+        customer = stripe.Customer.retrieve(stripe_session.customer)
+        name = stripe.PaymentIntent.retrieve(stripe_session.payment_intent).charges.data[0].billing_details.name;
+        email = customer.email
+        datetime = session['datetime']
+        stripe_order_id = request.args.get('session_id')
+        datetime = session['datetime']
+        # add new order and purchases and clear cart
+        new_order = Order(
+            stripe_order_id=stripe_order_id,
+            name=name,
+            pickup_time = datetime,
+            email = email,
+            status = "ordered",
+            payment_type="stripe",
+            payment_status="paid",
+            )
+        db.session.add(new_order)
+        db.session.commit()
+        if 'cart' in session:
+            for id in session['cart']:
+                new_purchase = Purchase(order_id=new_order.id, product_id=id, number_ordered=session['cart'][id]['amount'], number_made=0)
+                db.session.add(new_purchase)
+                db.session.commit()
+            del session['cart']
+        session['total']=0
+        parts = datetime.split(" ")
+        day=parts[0] + ' ' + parts[1]
+        time=''
+        if (parts[2] == 'AM'):
+            time="8 and 12 AM"
+        else:
+            time="12 and 6 PM"
+        return render_template('/customer/success.html', email=email, name=name, day=day, time=time)
+    except:
+        return redirect('/shop')
+
+@app.route('/orders', methods=['GET'])
+def orders():
+    if ("seller_email" not in session):
+        return redirect('/login')
+    orders = Order.query.all()
+    return render_template('seller/orders.html', orders=orders)
+
+@app.route('/orders', methods=['POST'])
+def add_order():
+    if ("seller_email" not in session):
+        return redirect('/login')
+    notes = 'None'
+    if (request.form['order_notes'] != ''):
+        notes = request.form['order_notes']
+    new_order = Order(
+        stripe_order_id="none",
+        name=request.form['order_name'],
+        pickup_time=request.form['order_pickup_time'],
+        email=request.form['order_email'],
+        status="ordered",
+        payment_type="not stripe",
+        payment_status="not paid",
+        notes=notes)
+    db.session.add(new_order)
+    db.session.commit()
+    return redirect('/orders')
+
+@app.route('/orders/<id>', methods=['GET'])
+def get_order(id):
+    if ("seller_email" not in session):
+        return redirect('/login')
+    order = Order.query.get_or_404(id)
+    return render_template('seller/order.html', order = order)
+
+@app.route('/orders/<id>', methods=['POST'])
+def update_order(id):
+    if ("seller_email" not in session):
+        return redirect('/login')
+    order = Order.query.get_or_404(id)
+    order.stripe_order_id = request.form['order_stripe_order_id']
+    order.name = request.form['order_name']
+    order.pickup_time = request.form['order_pickup_time']
+    order.email = request.form['order_email']
+    order.status = request.form['order_status']
+    order.payment_type = request.form['order_payment_type']
+    order.payment_status = request.form['order_payment_status']
+    order.notes = request.form['order_notes']
+    db.session.add(order)
+    db.session.commit()
+    return redirect(f'/orders/{id}')
