@@ -123,8 +123,4 @@ class SellerRoutesTestCase(TestCase):
             self.assertEqual(200, resp.status_code)
             self.assertIn('Order Details', resp.get_data(as_text=True))
             self.assertIn('Choose a Pickup Time', resp.get_data(as_text=True))
-<<<<<<< HEAD
             self.assertIn('Pay', resp.get_data(as_text=True))
-=======
-            self.assertIn('Pay', resp.get_data(as_text=True))
->>>>>>> add-purchases
