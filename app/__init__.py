@@ -250,7 +250,7 @@ def pay():
             'product_data': {
             'name': session['cart'][id]['name'],
             },
-            'unit_amount': round(session['cart'][id]['price']*100),
+            'unit_amount': round(float(session['cart'][id]['price'])*100),
         },
         'quantity': session['cart'][id]['amount'],
         });
@@ -381,5 +381,16 @@ def add_purchase(id):
         number_made = 0
     )
     db.session.add(new_purchase)
+    db.session.commit()
+    return redirect(f'/orders/{id}')
+
+@app.route('/orders/<id>/purchases/<pid>', methods=['POST'])
+def update_purchases(id, pid):
+    if ("seller_email" not in session):
+        return redirect('/login')
+    purchase = Purchase.query.get(pid)
+    purchase.number_ordered = request.form['number_ordered']
+    purchase.number_made = request.form['number_made']
+    db.session.add(purchase)
     db.session.commit()
     return redirect(f'/orders/{id}')

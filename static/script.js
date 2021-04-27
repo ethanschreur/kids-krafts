@@ -106,8 +106,3 @@ $('.checkout-button').click(async function(evt) {
 		return stripe.redirectToCheckout({ sessionId: sessionId.data.id });
 	}
 });
-
-$('.date-check').change(function(evt) {
-	$('.date-check').prop('checked', false);
-	$(evt.target).prop('checked', true);
-});
