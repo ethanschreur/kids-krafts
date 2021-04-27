@@ -70,4 +70,8 @@ class HelperFileTestCase(TestCase):
         last_week = [25, 26, 27, 28, 29, 30, 0]
         first_week = [2, 3, 4, 5, 6, 7, 8]
         self.assertEqual(helper.get_month_header('first', prev_month, curr_month, next_month, last_week, first_week), "March 25 - April 8")
+<<<<<<< HEAD
         self.assertEqual(helper.get_month_header('second', prev_month, curr_month, next_month, last_week, first_week), "April 25 - May 8") 
+=======
+        self.assertEqual(helper.get_month_header('second', prev_month, curr_month, next_month, last_week, first_week), "April 25 - May 8") 
+>>>>>>> add-purchases

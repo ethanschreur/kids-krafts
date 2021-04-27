@@ -36,14 +36,14 @@ class Subproduct(db.Model):
 class Order(db.Model):
     __tablename__ = "orders"
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
-    stripe_order_id = db.Column(db.Text, nullable = False, unique = True)
-    first_name = db.Column(db.Text, nullable = False)
-    last_name = db.Column(db.Text, nullable = False)
-    date_time = db.Column(db.DateTime, nullable = False)
+    stripe_order_id = db.Column(db.Text, nullable = False)
+    name = db.Column(db.Text, nullable = False)
+    pickup_time = db.Column(db.Text, nullable = False)
     email = db.Column(db.Text, nullable = False)
     status = db.Column(db.Text, nullable = False)
-    notes = db.Column(db.Text, nullable = False, default = "None")
-
+    payment_type = db.Column(db.Text, nullable=False)
+    payment_status = db.Column(db.Text, nullable=False)
+    notes = db.Column(db.Text, nullable = False, default="None")
     # relationships
     purchases = db.relationship('Purchase', backref = "order", cascade = "all, delete-orphan")
 
