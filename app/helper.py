@@ -1,18 +1,21 @@
 import calendar
 
 def get_prev_month(month):
+    """Given a month (1-12), it returns the previous month number."""
     prev_month = month - 1
     if prev_month == 0:
         prev_month = 12
     return prev_month
 
 def get_next_month(month):
+    """Given a month (1-12), it returns the next month number."""
     next_month = month + 1
     if (next_month == 13):
         next_month = 1
     return next_month
 
 def get_prev_year(month, year):
+    """Given a year int ex. 21 or 20 it returns the previous month's year number."""
     prev_month = get_prev_month(month)
     prev_year = year
     if prev_month == 12:
@@ -20,6 +23,7 @@ def get_prev_year(month, year):
     return prev_year
 
 def get_next_year(month, year):
+    """Given a year int ex. 21 or 20, it returns the next month's year number."""
     next_month = get_next_month(month)
     next_year = year
     if (next_month == 1):
@@ -27,6 +31,7 @@ def get_next_year(month, year):
     return next_year
 
 def get_two_weeks_options(month, year):
+    """Generates the two options for the two week time ranges that there can be during each month."""
     prev_month = get_prev_month(month)
     curr_month = month
     next_month = get_next_month(month)
@@ -52,6 +57,7 @@ def get_two_weeks_options(month, year):
 
 
 def whichOption(today, two_weeks_options):
+    """Looks at the two week options and decides which one to go with."""
     if (today <= two_weeks_options[0]['range'][1][-1]):
         return "first"
     else: 
@@ -59,24 +65,28 @@ def whichOption(today, two_weeks_options):
 
 
 def get_last_week(which, two_weeks_options):
+    """Returns the last week of the first month for the two week time range."""
     if which == "first":
         return two_weeks_options[0]['range'][0]
     else:
         return two_weeks_options[1]['range'][0]
 
 def get_first_week(which, two_weeks_options):
+    """Returns the first week of the second month for the two week time range."""
     if which == "first":
         return two_weeks_options[0]['range'][1]
     else:
         return two_weeks_options[1]['range'][1]
 
 def get_total_month_days(which, two_weeks_options):
+    """Gets the total number of days for a specific month and year."""
     if which == "first":
         return (calendar.monthrange(2000 + two_weeks_options[0]['years'][0], two_weeks_options[0]['months'][0])[1])
     else: 
         return (calendar.monthrange(2000 + two_weeks_options[1]['years'][0], two_weeks_options[1]['months'][0])[1])
 
 def get_new_last_week(last_week, which, two_weeks_options):
+    """Transforms a list of the last week's days to replace any zeros with their respective actual number representations."""
     total_month_days = get_total_month_days(which, two_weeks_options)
     if (0 in last_week):
         new_last_week = []
@@ -92,6 +102,7 @@ def get_new_last_week(last_week, which, two_weeks_options):
         return last_week
 
 def get_new_first_week(first_week, which, two_weeks_options):
+    """Transforms a list of the first week's days to replace any zeros with their respective actual number representations."""
     total_month_days = get_total_month_days(which, two_weeks_options)
     if (0 in first_week):
         new_first_week = []
@@ -107,6 +118,7 @@ def get_new_first_week(first_week, which, two_weeks_options):
         return first_week
 
 def get_first_month(which, prev_month, curr_month):
+    """Returns the first month's number representation for the two week range."""
     if which == "first":
         first_month = prev_month
     else:
@@ -114,6 +126,7 @@ def get_first_month(which, prev_month, curr_month):
     return first_month
 
 def get_second_month(which, curr_month, next_month):
+    """Returns the second month's number representation for the two week range."""
     if which == "first":
         second_month = curr_month
     else:
@@ -121,6 +134,7 @@ def get_second_month(which, curr_month, next_month):
     return second_month
 
 def get_month_header(which, prev_month, curr_month, next_month, last_week, first_week):
+    """Generates the header that will go above the calendar that displays the two week range."""
     if which == "first":
         month_header = f"{prev_month} {last_week[0]} - {curr_month} {first_week[-1]}"
     else:
