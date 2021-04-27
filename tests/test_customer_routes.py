@@ -84,3 +84,11 @@ class SellerRoutesTestCase(TestCase):
             self.assertIn('Sharon Schreur', resp.get_data(as_text=True))
             self.assertIn('About Us', resp.get_data(as_text=True))
             self.assertIn('Social', resp.get_data(as_text=True))
+
+    def test_order_details_page(self):
+        with self.client as client:
+            resp = client.get('/order_details')
+            self.assertEqual(200, resp.status_code)
+            self.assertIn('Order Details', resp.get_data(as_text=True))
+            self.assertIn('Choose a Pickup Time', resp.get_data(as_text=True))
+            self.assertIn('Pay', resp.get_data(as_text=True))
