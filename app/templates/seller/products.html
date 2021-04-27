@@ -50,7 +50,7 @@
                   </thead>
             {% for prod in products %}
             <tbody>
-                  <tr class="table-row" data-id={{prod.id}}>
+                  <tr class="table-row" data-id={{prod.id}} data-type="product">
                     <td>{{prod.name}}</td>
                     <td><img src="{{prod.image_url}}" class="prod-img"></img></td>
                     <td>{{prod.price}}</td>
