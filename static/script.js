@@ -65,9 +65,12 @@ $('#your_cart_tbody').click(function(evt) {
 });
 
 $('#your_cart_tbody').change(function(evt) {
+	const id = $(evt.target).data().id;
+	const amount = $(evt.target).val();
 	if ($(evt.target).hasClass('amount-input')) {
 		calcTotalCost();
 	}
+	axios.post('/cart/amount', { id, amount });
 });
 
 $('.date-check').change(function(evt) {

@@ -152,6 +152,25 @@ def shop_page():
 def contact():
     mail = Mail(app)
     form = ContactForm()
+    if 'cart' not in session:
+        session['cart'] = {}
+    if 'total' not in session:
+        session['total'] = 0
+    if(request.args.get('shipping') == 'true' and session['cart'] != {} and session['total'] != 0):
+        order = []
+        for id in session['cart']:
+            prod = []
+            prod.append(session['cart'][id]['name'])
+            prod.append(session['cart'][id]['amount'])
+            order.append(prod)
+        form.message.data = f"""Order: {str(order)[1:-1]}
+
+Total: ${session['total']} (before shipping)
+
+Shipping Address:
+
+Notes:"""
+        form.subject.data = "Shipping Request"
     if (form.validate_on_submit()):
         msg = Message(form.subject.data, sender='kidskrafts4u@gmail.com', recipients=[
             "%s" % (form.email.data)])
@@ -171,14 +190,14 @@ def cart_page():
         session['total'] = 0
     total = 0
     for id in session['cart']:
-        total = total + float(session['cart'][id]['price'])
-    session['total'] = total
+        total = total + (float(session['cart'][id]['price']) * float(session['cart'][id]['amount']))
+    session['total'] = round(total, 2)
     return render_template('/customer/cart.html', order_details=True)
 
 @app.route('/cart', methods=['POST'])
 def add_to_cart():
     rows = session['cart']
-    rows[str(request.json['id'])] = {'name': request.json['name'], 'image': request.json['image'], 'price': request.json['price']}
+    rows[str(request.json['id'])] = {'name': request.json['name'], 'image': request.json['image'], 'price': request.json['price'], 'amount': 1}
     session['cart'] = rows
     return redirect('/shop')
 
@@ -190,6 +209,14 @@ def remove_from_cart():
     session['cart'] = cart
     return redirect('/cart')
 
+@app.route('/cart/amount', methods=['POST'])
+def change_amount():
+    id = request.json['id']
+    amount = request.json['amount']
+    cart = session['cart']
+    cart[f"{id}"]['amount'] = amount
+    session['cart']=cart
+    return redirect('/cart')
 
 @app.route('/order_details')
 def order_details():
