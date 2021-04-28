@@ -3,35 +3,102 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<center>
-    <h1 class="mt-5">Seller Dashboard</h1>
-</center>
 <div class="container d-flex justify-content-center">
-    <span class="d-inline d-lg-none m-3">
+    <span class="d-inline d-lg-none m-3 mt-5">
         <a class="m-3 btn btn-md btn-success text-black" href="/products">Products</a>
         <a class="m-3 btn btn-md btn-success text-black" href="/orders">Orders</a>
     </span>
 </div>
-<center>
-    <div class="container-fluid">
-    <div class="row bg-white rounded m-3 p-3">
-        <div class="p-3 col-6 col-sm-6 col-md-3">
-            <h3>Total Revenue</h3>
-            <h3>{{revenue}}</h3>
-        </div>
-        <div class="p-3 col-6 col-sm-6 col-md-3">
-            <h3>Kits Bought</h3>
-            <h3>{{kits_bought}}</h3>
-        </div>
-        <div class="p-3 col-6 col-sm-6 col-md-3">
-            <h3>Crafts Bought</h3>
-            <h3>{{crafts_bought}}</h3>
-        </div>
-        <div class="p-3 col-6 col-sm-6 col-md-3">
-            <h3>Customers</h3>
-            <h3>{{unique_customers}}</h3>
+<div class="row container-fluid">
+    <div class="add-product col-lg-4 col-12">
+        <div class="p-3 add-product-container border rounded shadow-lg">
+        <center><h2>Seller Dashboard</h2></center>
+        <div class="row">
+            <div class="p-3 col-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Total Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{revenue}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-3 col-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Kits Bought</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{kits_bought}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-3 col-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Crafts Bought</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{crafts_bought}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-3 col-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Total Customers</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{unique_customers}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+</div>
+    <div class="view-products col-lg-8 col-12">
+        <div class="p-3 view-products-container border rounded shadow-lg">
+            <center><h2>Product Info</h2></center>
+            <table class="table">
+                <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Image</th>
+                      <th scope="col">Amount Ordered</th>
+                      <th scope="col">Amount Made</th>
+                      <th scope="col">Difference</th>
+                    </tr>
+                  </thead>
+            {% for id in prod_info %}
+            <tbody>
+                  <tr class="table-row">
+                    <td>{{prod_info[id].name}}</td>
+                    <td><img src="{{prod_info[id].image_url}}" class="prod-img"></img></td>
+                    <td>{{prod_info[id].amount_ordered}}</td>
+                    <td>{{prod_info[id].amount_made}}</td>
+                    <td>{{prod_info[id].amount_ordered - prod_info[id].amount_made}}</td>
+                </tr>
+              </tbody>
+            {% endfor %}
+            </table>
+        </div>
     </div>
-</center>
+</div>
 {% endblock %}
