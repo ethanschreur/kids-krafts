@@ -39,12 +39,58 @@
             <table class="table">
                 <thead>
                     <tr>
-                      <th scope="col">Name</th>
-                      <th scope="col">Email</th>
-                      <th scope="col">Pickup Time</th>
-                      <th scope="col">Order Status</th>
-                      <th scope="col">Payment Type</th>
-                      <th scope="col">Payment Status</th>
+                      <th scope="col"><a href="/orders?order_by=name">Name</a></th>
+                      <th scope="col"><a href="/orders?order_by=email">Email</a></th>
+                      <th scope="col">
+                        <div class="dropdown">
+                            <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                              <b>Pickup Time</b>
+                            </button>
+                            <div class="dropdown-menu p-3">
+                              <form action="/orders">
+                                <input type="text" placeholder="April 24 PM" name="pickup_time">
+                                <button class="mt-3 btn btn-primary">Enter</button>
+                              </form>
+                                
+                            </div>
+                          </div>
+                      </th>
+                      <th scope="col">                        
+                          <div class="dropdown">
+                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                          <b>Order Status</b>
+                        </button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="/orders">All</a>
+                          <a class="dropdown-item" href="/orders?order_by=order_status&value=made">Made</a>
+                          <a class="dropdown-item" href="/orders?order_by=order_status&value=ordered">Ordered</a>
+                          <a class="dropdown-item" href="/orders?order_by=order_status&value=fulfilled">Fulfilled</a>
+                        </div>
+                      </div>
+                    </th>
+                      <th scope="col">
+                        <div class="dropdown">
+                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                            <b>Payment Type</b>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/orders">All</a>
+                            <a class="dropdown-item" href="/orders?order_by=payment_type&value=stripe">Stripe</a>
+                            <a class="dropdown-item" href="/orders?order_by=payment_type&value=not_stripe">Not Stripe</a>
+                          </div>
+                        </div>
+                      </th>
+                      <th scope="col">
+                        <div class="dropdown">
+                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                            <b>Payment Status</b>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/orders">All</a>
+                            <a class="dropdown-item" href="/orders?order_by=payment_status&value=paid">Paid</a>
+                            <a class="dropdown-item" href="/orders?order_by=payment_status&value=not_paid">Not Paid</a>
+                          </div>
+                        </div></th>
                       <th scope="col">Notes</th>
                     </tr>
                   </thead>
