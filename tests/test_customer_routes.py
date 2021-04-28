@@ -1,6 +1,7 @@
 from unittest import TestCase
 from app import create_app
 import os
+import json
 
 class SellerRoutesTestCase(TestCase):
     def setUp(self):
@@ -75,7 +76,39 @@ class SellerRoutesTestCase(TestCase):
             resp = client.post('/contact', data={'name': 'name', 'email': 'contact.kidskrafts4u@gmail.com', 'subject': 'Testing', 'message': 'This is a test.'}, follow_redirects=True)
             self.assertEqual(200, resp.status_code)
             self.assertIn('Your message was successfully sent', resp.get_data(as_text=True))
-    
+            
+            # test going to the contact page with shipping = true in request args but no cart in session
+            resp = client.get('/contact?shipping=true')
+            self.assertEqual(200, resp.status_code)
+            self.assertNotIn('Order', resp.get_data(as_text=True))
+            self.assertNotIn('Total', resp.get_data(as_text=True))
+            self.assertNotIn('Shipping Address', resp.get_data(as_text=True))
+            self.assertNotIn('Notes', resp.get_data(as_text=True))
+
+            # test going to the contact page with shipping = true in request args but an empty cart in session
+            with client.session_transaction() as session:
+                session['cart'] = {}
+            resp = client.get('/contact?shipping=true')
+            self.assertEqual(200, resp.status_code)
+            self.assertNotIn('Order', resp.get_data(as_text=True))
+            self.assertNotIn('Total', resp.get_data(as_text=True))
+            self.assertNotIn('Shipping Address', resp.get_data(as_text=True))
+            self.assertNotIn('Notes', resp.get_data(as_text=True))
+
+            # test going to the contact page with shipping = true in request args with cart in session
+            with client.session_transaction() as session:
+                session['cart'] = {'1': {'name': 'kit_name', 'amount': 5}}
+                session['total'] = 10.99
+            # try changing the amount
+            client.post('/cart/amount', json={ 'id': 1, 'amount': 6})
+            resp = client.get('/contact?shipping=true')
+            self.assertEqual(200, resp.status_code)
+            self.assertIn('Order', resp.get_data(as_text=True))
+            self.assertIn('Total', resp.get_data(as_text=True))
+            self.assertIn('Shipping Address', resp.get_data(as_text=True))
+            self.assertIn('Notes', resp.get_data(as_text=True))
+            self.assertIn("[&#39;kit_name&#39;, 6]", resp.get_data(as_text=True))
+
     def test_about_page(self):
         with self.client as client:
             resp = client.get('/about')
@@ -92,3 +125,16 @@ class SellerRoutesTestCase(TestCase):
             self.assertIn('Order Details', resp.get_data(as_text=True))
             self.assertIn('Choose a Pickup Time', resp.get_data(as_text=True))
             self.assertIn('Pay', resp.get_data(as_text=True))
+
+    def test_payment_process_and_success_page(self):
+        with self.client as client:
+            with client.session_transaction() as session:
+                session['cart'] = {}
+            client.post('/cart', json={'id': '1', 'name': self.product_data_selling['product_name'], 'price': self.product_data_selling['product_price'], 'image': self.product_data_selling['product_image']}, content_type='application/json')
+            resp = client.get('/cart')
+            resp = client.post('/create-checkout-session', json={'pickup': '25 AM', 'month': 'April'})
+            session_id = (json.loads(resp.get_data())['id'])
+            self.assertEqual(type(json.loads(resp.get_data())['id']), str)
+
+            resp = client.get(f'/success?{session_id}')
+            self.assertEqual(302, resp.status_code)
