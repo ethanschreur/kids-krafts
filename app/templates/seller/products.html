@@ -45,7 +45,18 @@
                       <th scope="col">Name</th>
                       <th scope="col">Image</th>
                       <th scope="col">Price</th>
-                      <th scope="col">Selling Status</th>
+                      <th scope="col">
+                        <div class="dropdown">
+                            <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <b>Selling Status</b>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="/products">All</a>
+                              <a class="dropdown-item" href="/products?order_by=selling_status&value=selling">Selling</a>
+                              <a class="dropdown-item" href="/products?order_by=selling_status&value=not_selling">Not Selling</a>
+                            </div>
+                          </div>
+                      </th>
                     </tr>
                   </thead>
             {% for prod in products %}

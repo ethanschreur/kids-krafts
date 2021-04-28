@@ -4,6 +4,7 @@ from forms import LoginForm, ContactForm
 from models import connect_db, Product, db, Subproduct, Order, Purchase
 from config import app_config
 from .helper import get_two_weeks_options, whichOption, get_last_week, get_first_week, get_new_first_week, get_new_last_week, get_next_month, get_prev_month, get_first_month, get_second_month, get_month_header
+from .filters import filter_products
 import os
 from flask_mail import Message, Mail
 import random
@@ -58,6 +59,8 @@ def products():
     if ("seller_email" not in session):
         return redirect('/login')
     products = Product.query.all()
+    if 'order_by' in request.args:
+        products = filter_products(request.args['order_by'], request.args['value'], products)
     return render_template('seller/products.html', products=products)
 
 @app.route('/products', methods=['POST'])
