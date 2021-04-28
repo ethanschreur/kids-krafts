@@ -7,9 +7,31 @@
     <h1 class="mt-5">Seller Dashboard</h1>
 </center>
 <div class="container d-flex justify-content-center">
-    <span class="d-inline d-lg-none mt-3">
+    <span class="d-inline d-lg-none m-3">
         <a class="m-3 btn btn-md btn-success text-black" href="/products">Products</a>
         <a class="m-3 btn btn-md btn-success text-black" href="/orders">Orders</a>
     </span>
 </div>
+<center>
+    <div class="container-fluid">
+    <div class="row bg-white rounded m-3 p-3">
+        <div class="p-3 col-6 col-sm-6 col-md-3">
+            <h3>Total Revenue</h3>
+            <h3>{{revenue}}</h3>
+        </div>
+        <div class="p-3 col-6 col-sm-6 col-md-3">
+            <h3>Kits Bought</h3>
+            <h3>{{kits_bought}}</h3>
+        </div>
+        <div class="p-3 col-6 col-sm-6 col-md-3">
+            <h3>Crafts Bought</h3>
+            <h3>{{crafts_bought}}</h3>
+        </div>
+        <div class="p-3 col-6 col-sm-6 col-md-3">
+            <h3>Customers</h3>
+            <h3>{{unique_customers}}</h3>
+        </div>
+    </div>
+    </div>
+</center>
 {% endblock %}

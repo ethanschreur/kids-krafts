@@ -52,7 +52,24 @@ def logout():
 def get_dashboard():
     if ("seller_email" not in session):
         return redirect('/login')
-    return render_template('seller/dashboard.html') 
+    revenue = 0
+    kits_bought = 0
+    crafts_bought = 0
+    unique_customers = 0
+    purchases = Purchase.query.all()
+    orders = Order.query.all()
+    for purchase in purchases:
+        purchase_cost = Product.query.get(purchase.product_id).price * purchase.number_ordered
+        revenue = revenue + purchase_cost
+        crafts_bought = crafts_bought + purchase.number_ordered
+    unique_emails = []
+    for order in orders:
+        if order.email not in unique_emails:
+            unique_emails.append(order)
+        kits_bought = kits_bought + len(order.purchases)
+    revenue = f'${round(revenue, 2)}'
+    unique_customers = len(unique_emails)
+    return render_template('seller/dashboard.html', revenue=revenue, kits_bought=kits_bought, crafts_bought=crafts_bought, unique_customers=unique_customers) 
 
 @app.route('/products', methods=['GET'])
 def products():
