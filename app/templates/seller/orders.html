@@ -1,0 +1,115 @@
+{% extends 'seller/seller_base.html' %}
+
+{% block title %}Orders{% endblock %}
+
+{% block content %}
+<div class="row container-fluid">
+    <div class="add-order col-lg-4 col-12">
+        <div class="p-3 add-order-container border rounded shadow-lg bg-white">
+        <center><h2>Add an Order</h2></center>
+    <form method="POST" action="/orders">
+        <div class=form-group">
+            <label for="order-name">Name</label>
+            <input type="text" name="order_name" class="form-control" id="order-name" required placeholder="Full Name">
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="order-email">Email</label>
+            <input type="email" name="order_email" class="form-control" id="order-email" required placeholder="Email">
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="order-pickup-time">Pickup Time</label>
+            <input type="text" name="order_pickup_time" id="order-pickup-time" class="form-control" placeholder="April 25 AM" required>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="order-notes">Notes</label>
+            <textarea name="order_notes" id="order-notes" class="form-control" placeholder="Notes" rows="3"></textarea>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+    </div>
+    </div>
+    <div class="view-orders col-lg-8 col-12">
+        <div class="p-3 view-orders-container border rounded shadow-lg bg-white" style="max-height: calc(100vh - 105px);">
+            <center><h2>Orders</h2></center>
+            <div style="overflow: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                      <th scope="col"><a href="/orders?order_by=name">Name</a></th>
+                      <th scope="col"><a href="/orders?order_by=email">Email</a></th>
+                      <th scope="col">
+                        <div class="dropdown">
+                            <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                              <b>Pickup Time</b>
+                            </button>
+                            <div class="dropdown-menu p-3">
+                              <form action="/orders">
+                                <input class="mt-3" type="text" placeholder="April 24 PM" name="pickup_time">
+                                <button class="mt-3 btn btn-primary">Enter</button>
+                              </form>
+                                
+                            </div>
+                          </div>
+                      </th>
+                      <th scope="col">                        
+                          <div class="dropdown">
+                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                          <b>Order Status</b>
+                        </button>
+                        <div class="dropdown-menu">
+                          <a class="dropdown-item" href="/orders">All</a>
+                          <a class="dropdown-item" href="/orders?order_by=order_status&value=made">Made</a>
+                          <a class="dropdown-item" href="/orders?order_by=order_status&value=ordered">Ordered</a>
+                          <a class="dropdown-item" href="/orders?order_by=order_status&value=fulfilled">Fulfilled</a>
+                        </div>
+                      </div>
+                    </th>
+                      <th scope="col">
+                        <div class="dropdown">
+                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                            <b>Payment Type</b>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/orders">All</a>
+                            <a class="dropdown-item" href="/orders?order_by=payment_type&value=stripe">Stripe</a>
+                            <a class="dropdown-item" href="/orders?order_by=payment_type&value=not_stripe">Not Stripe</a>
+                          </div>
+                        </div>
+                      </th>
+                      <th scope="col">
+                        <div class="dropdown">
+                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+                            <b>Payment Status</b>
+                          </button>
+                          <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/orders">All</a>
+                            <a class="dropdown-item" href="/orders?order_by=payment_status&value=paid">Paid</a>
+                            <a class="dropdown-item" href="/orders?order_by=payment_status&value=not_paid">Not Paid</a>
+                          </div>
+                        </div></th>
+                      <th scope="col">Notes</th>
+                    </tr>
+                  </thead>
+            {% for order in orders %}
+            <tbody>
+                  <tr class="table-row" data-id={{order.id}} data-type="order">
+                    <td>{{order.name}}</td>
+                    <td>{{order.email}}</td>
+                    <td>{{order.pickup_time}}</td>
+                    <td>{{order.status}}</td>
+                    <td>{{order.payment_type}}</td>
+                    <td>{{order.payment_status}}</td>
+                    <td>{{order.notes}}</td>
+                </tr>
+              </tbody>
+            {% endfor %}
+            </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}  

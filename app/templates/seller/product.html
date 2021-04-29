@@ -13,15 +13,15 @@
                     <center><h2 class="p-3">{{prod.name}}</h2></center>
                     </div>
                 </div>
-                <div class="col-sm-12 d-flex justify-content-center">
+                <div class="col-sm-12 d-flex justify-content-center mb-3">
                     <div>
-                    <img src="{{prod.image_url}}" height="250" width="250">
+                    <img src="{{prod.image_url}}" height="200" width="200">
                     </div>
                 </div>
-                <div class="col-sm-12 d-md-5 d-flex" style="overflow: auto;">
+                <div class="col-sm-12 d-md-5 d-flex justify-content-center" style="overflow: auto;">
                     {% for sub in prod.subproducts %}
                     <div class="d-flex flex-column align-items-center">
-                        <img class="m-3" src="{{sub.image_url}}" height="130" width="130">
+                        <img src="{{sub.image_url}}" height="130" width="130">
                         <span class="mb-3 mx-3">{{sub.name}}</span>
                     </div>
                     {% endfor %}
@@ -72,7 +72,6 @@
                     <div class="form-group col-6">
                         <label for="product-selling-status">Selling Status</label>
                         <select id="product-selling-status" name="product_selling_status" class="form-control" required>
-                            <option>Choose...</option>
                             {% if prod.category=="Selling" %}
                             <option selected>Selling</option>
                             {% else %}

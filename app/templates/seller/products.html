@@ -26,7 +26,6 @@
         <div class="form-group">
             <label for="product-selling-status">Selling Status</label>
             <select id="product-selling-status" name="product_selling_status" class="form-control" required>
-                <option selected>Choose...</option>
                 <option>Selling</option>
                 <option>Not Selling</option>
             </select>
@@ -37,20 +36,32 @@
     </div>
 </div>
     <div class="view-products col-lg-8 col-12">
-        <div class="p-3 view-products-container border rounded shadow-lg">
+        <div class="p-3 view-products-container border rounded shadow-lg" style="max-height: calc(100vh - 105px);">
             <center><h2>Products</h2></center>
+            <div style="overflow: auto;">
             <table class="table">
                 <thead>
                     <tr>
                       <th scope="col">Name</th>
                       <th scope="col">Image</th>
                       <th scope="col">Price</th>
-                      <th scope="col">Selling Status</th>
+                      <th scope="col">
+                        <div class="dropdown">
+                            <button class="dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <b>Selling Status</b>
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="/products">All</a>
+                              <a class="dropdown-item" href="/products?order_by=selling_status&value=selling">Selling</a>
+                              <a class="dropdown-item" href="/products?order_by=selling_status&value=not_selling">Not Selling</a>
+                            </div>
+                          </div>
+                      </th>
                     </tr>
                   </thead>
             {% for prod in products %}
             <tbody>
-                  <tr class="table-row" data-id={{prod.id}}>
+                  <tr class="table-row" data-id={{prod.id}} data-type="product">
                     <td>{{prod.name}}</td>
                     <td><img src="{{prod.image_url}}" class="prod-img"></img></td>
                     <td>{{prod.price}}</td>
@@ -59,6 +70,7 @@
               </tbody>
             {% endfor %}
             </table>
+            </div>
         </div>
     </div>
 </div>
