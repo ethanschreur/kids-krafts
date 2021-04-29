@@ -74,8 +74,9 @@
     </div>
 </div>
     <div class="view-products col-lg-8 col-12">
-        <div class="p-3 view-products-container border rounded shadow-lg">
+        <div class="p-3 view-products-container border rounded shadow-lg" style="max-height: calc(100vh - 105px);">
             <center><h2>Product Info</h2></center>
+            <div style="overflow: auto;">
             <table class="table">
                 <thead>
                     <tr>
@@ -88,7 +89,7 @@
                   </thead>
             {% for id in prod_info %}
             <tbody>
-                  <tr class="table-row">
+                  <tr class="table-row" data-id={{id}} data-type="product">
                     <td>{{prod_info[id].name}}</td>
                     <td><img src="{{prod_info[id].image_url}}" class="prod-img"></img></td>
                     <td>{{prod_info[id].amount_ordered}}</td>
@@ -98,6 +99,7 @@
               </tbody>
             {% endfor %}
             </table>
+            </div>
         </div>
     </div>
 </div>

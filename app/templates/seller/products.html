@@ -26,7 +26,6 @@
         <div class="form-group">
             <label for="product-selling-status">Selling Status</label>
             <select id="product-selling-status" name="product_selling_status" class="form-control" required>
-                <option selected>Choose...</option>
                 <option>Selling</option>
                 <option>Not Selling</option>
             </select>
@@ -37,8 +36,9 @@
     </div>
 </div>
     <div class="view-products col-lg-8 col-12">
-        <div class="p-3 view-products-container border rounded shadow-lg">
+        <div class="p-3 view-products-container border rounded shadow-lg" style="max-height: calc(100vh - 105px);">
             <center><h2>Products</h2></center>
+            <div style="overflow: auto;">
             <table class="table">
                 <thead>
                     <tr>
@@ -70,6 +70,7 @@
               </tbody>
             {% endfor %}
             </table>
+            </div>
         </div>
     </div>
 </div>
