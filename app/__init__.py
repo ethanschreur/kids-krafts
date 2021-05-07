@@ -167,10 +167,11 @@ def delete_subproduct(id, sid):
 
 @app.route('/', methods=['GET'])
 def landing_page():
-    path = os.getcwd() + '/static/links.txt'
-    images_file = open(path, 'r')
-    images = images_file.readlines()
-    images_file.close()
+    images = []
+    for product in Product.query.all():
+        for sub in product.subproducts:
+            if sub.image_url not in images:
+                images.append(sub.image_url)
     return render_template('/customer/landing.html', images=images)
 
 @app.route('/shop')
