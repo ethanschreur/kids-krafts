@@ -46,6 +46,8 @@ class ProdConfig(object):
     MAIL_USERNAME = 'kidskrafts4u@gmail.com'
     MAIL_PASSWORD = environ.get('email_password')
     STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
+    SESSION_TYPE = 'filesystem'
+    SESSION_TYPE = 'filesystem'
 
 app_config = {
     'DEFAULT': DevConfig,
