@@ -35,8 +35,9 @@ class TestConfig(object):
     STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
 
 class ProdConfig(object):
+    ENV = 'production'
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL', "postgres:///kids-krafts")
+    SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL')
     SECRET_KEY = environ.get('secret_key')
     MAIL_SERVER = "smtp.gmail.com"
     MAIL_PORT = 465
