@@ -10,13 +10,14 @@
                 <span class="p-3 h2 bg-white rounded">📦 Order Details</span>
             </center>
             <li class="list-group-item">Currently, online payments are only set up for pickup customers.</li>
-            <!-- <li class="list-group-item">If you would like your order shipped please click the following link that will fill out a contact form with your order details. Add your address to the message and we will get back to you with shipping costs. We will then direct you how to make the payment.</li>
-            <li class="list-group-item">If you intend to pickup your order, select a pickup date on the calendar below and continue the checkout.</li> -->
+            <li class="list-group-item">If you would like your order shipped please click the following link that will fill out a contact form with your order details. Add your address to the message and we will get back to you with shipping costs. We will then direct you how to make the payment. Here is the <a href="/contact?shipping=true">link</a>.</li>
+            <li class="list-group-item">If you intend to pickup your order, select a pickup date on the calendar below and continue the checkout.</li>
             <center class="m-5">
                 <span class="p-3 h2 bg-white rounded">Choose a Pickup Time 📅</span>
             </center>
             <li class="list-group-item">Orders can be picked up during a two week period around the end of {{first_month}} and the start of {{second_month}}. The pickup location is in <a href="https://www.google.com/maps/place/3160+Hillside+Ct,+Zeeland,+MI+49464/@42.8259657,-86.0366443,17z/data=!3m1!4b1!4m5!3m4!1s0x8819930d12731d75:0xe585f95c5c9455ef!8m2!3d42.8259657!4d-86.0344556" target="_blank">Zeeland, Michigan</a>.</li>
             <li class="list-group-item">AM hours are from 8 to 12. PM hours are from 12 to 6.</li>
+            <li class="list-group-item">Please select a pickup date and time on the calendar below.</li>
         <br>
         <table class="table mb-5">
             <center><h4 class="m-3">{{month_header}}</h4></center>
@@ -37,12 +38,12 @@
                     <td>
                         {{day}}
                         <br>
-                        <input class="form-check-input date-check" type="checkbox" id="{{day}} AM">
+                        <input class="form-check-input date-check" type="checkbox" id="{{day}} AM" data-first-month="{{first_month}}" data-second-month="{{second_month}}">
                         <label class="form-check-label" for="{{day}} AM">
                           AM
                         </label>
                         <br>
-                        <input class="form-check-input date-check" type="checkbox" id="{{day}} PM">
+                        <input class="form-check-input date-check" type="checkbox" id="{{day}} PM" data-first-month="{{first_month}}" data-second-month="{{second_month}}">
                         <label class="form-check-label" for="{{day}} PM">
                           PM
                         </label>
@@ -54,12 +55,12 @@
                     <td>
                         {{day}}
                         <br>
-                        <input class="form-check-input date-check" type="checkbox" id="{{day}} AM">
+                        <input class="form-check-input date-check" type="checkbox" id="{{day}} AM" data-first-month="{{first_month}}" data-second-month="{{second_month}}">
                         <label class="form-check-label" for="{{day}} AM">
                           AM
                         </label>
                         <br>
-                        <input class="form-check-input date-check" type="checkbox" id="{{day}} PM">
+                        <input class="form-check-input date-check" type="checkbox" id="{{day}} PM" data-first-month="{{first_month}}" data-second-month="{{second_month}}">
                         <label class="form-check-label" for="{{day}} PM">
                           PM
                         </label>
@@ -69,7 +70,7 @@
             </tbody>
         </table>
         <center>
-            <a class="m-3 btn btn-lg btn-primary text-white" href="/order_details">Pay <i class="fas fa-credit-card"></i></a>    
+            <a class="checkout-button m-3 btn btn-lg btn-primary text-white">Pay <i class="fas fa-credit-card"></i></a>
         </center>
     </div>
 </div>

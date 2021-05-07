@@ -16,9 +16,11 @@ class DevConfig(object):
     MAIL_USE_TLS = False
     MAIL_USERNAME = 'kidskrafts4u@gmail.com'
     MAIL_PASSWORD = environ.get('email_password')
+    STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
 
 class TestConfig(object):
     DEBUG = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://postgres:postgres@postgres:5432/kids_krafts_test'
     WTF_CSRF_ENABLED = False
     SQLALCHEMY_ECHO = False
@@ -30,10 +32,13 @@ class TestConfig(object):
     MAIL_USE_TLS = False
     MAIL_USERNAME = 'kidskrafts4u@gmail.com'
     MAIL_PASSWORD = environ.get('email_password')
+    STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
 
 class ProdConfig(object):
+    ENV = 'production'
+    WTF_CSRF_ENABLED = False
     DEBUG = False
-    DATABASE_URL = ""
+    SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL')
     SECRET_KEY = environ.get('secret_key')
     MAIL_SERVER = "smtp.gmail.com"
     MAIL_PORT = 465
@@ -41,6 +46,8 @@ class ProdConfig(object):
     MAIL_USE_TLS = False
     MAIL_USERNAME = 'kidskrafts4u@gmail.com'
     MAIL_PASSWORD = environ.get('email_password')
+    STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
+    SESSION_TYPE = 'filesystem'
 
 app_config = {
     'DEFAULT': DevConfig,
