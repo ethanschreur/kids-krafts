@@ -36,6 +36,7 @@ class TestConfig(object):
 
 class ProdConfig(object):
     ENV = 'production'
+    WTF_CSRF_ENABLED = False
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL')
     SECRET_KEY = environ.get('secret_key')
@@ -46,7 +47,6 @@ class ProdConfig(object):
     MAIL_USERNAME = 'kidskrafts4u@gmail.com'
     MAIL_PASSWORD = environ.get('email_password')
     STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
-    SESSION_TYPE = 'filesystem'
     SESSION_TYPE = 'filesystem'
 
 app_config = {
