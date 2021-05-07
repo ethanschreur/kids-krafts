@@ -7,18 +7,18 @@
     <div class="row no-gutters bg-white" style="width: 100vw;">
         {% for image in images|shuffle %}
         {% if loop.index <= 2 %}
-        <div class="top-image col-6 col-md-3 col-xl-2 bg-white p-3" style="overflow: hidden; height: 300px;">
-            <img class="border-0" style="object-fit: cover; max-height: 100%; min-height: 100%; max-width: 100%; min-width: 100%;" src="{{image}}" alt="">
+        <div class="top-image col-6 col-md-3 col-xl-2 bg-white p-3" style="overflow: hidden;">
+            <img class="border-0" style="object-fit: cover; max-height: 100%; min-height: 100%; max-width: 100%; min-width: 100%;" src="{{url_for('download_image', resource = image)}}" alt="">
         </div> 
          {% endif %}
         {% if loop.index > 2 and loop.index <= 4 %}
         <div class="top-image col-6 col-md-3 col-xl-2 bg-white p-3 d-none d-md-block" style="overflow: hidden; height: 300px;">
-            <img class="border-0" style="object-fit: cover; max-height: 100%; min-height: 100%; max-width: 100%; min-width: 100%;" src="{{image}}" alt="">
+            <img class="border-0" style="object-fit: cover; max-height: 100%; min-height: 100%; max-width: 100%; min-width: 100%;" src="{{url_for('download_image', resource = image)}}" alt="">
         </div> 
          {% endif %}
         {% if loop.index > 4 and loop.index <= 6 %}
         <div class="top-image col-6 col-md-3 col-xl-2 bg-white p-3 d-none d-xl-block" style="overflow: hidden; height: 300px;">
-            <img class="border-0" style="object-fit: cover; max-height: 100%; min-height: 100%; max-width: 100%; min-width: 100%;" src="{{image}}" alt="">
+            <img class="border-0" style="object-fit: cover; max-height: 100%; min-height: 100%; max-width: 100%; min-width: 100%;" src="{{url_for('download_image', resource = image)}}" alt="">
         </div> 
          {% endif %}
         {% endfor %}
@@ -31,7 +31,7 @@
         <div class="col-12 col-md-4 d-flex justify-content-center">
             <div class="card mb-3" style="width: 18rem;">
                 <center>
-                    <img class="card-img-top m-3" style="width: calc(100% - 2rem);" src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.6435-9/166236184_218591393149418_3631503204675004976_n.jpg?_nc_cat=100&ccb=1-3&_nc_sid=730e14&_nc_ohc=DqQv8DAOCpsAX9Cbfk3&_nc_ht=scontent-ort2-2.xx&oh=fa030e9a10979d03de5becbc110dd76d&oe=60926026">
+                    <img class="card-img-top m-3 top-image" style="width: calc(100% - 2rem); object-fit: cover; height: 250px" src="../static/images/craft-kits.png">
                 </center>
                 <div class="card-body">
                   <h5 class="card-title">Craft Kits</h5>
@@ -42,7 +42,7 @@
         <div class="col-12 col-md-4 d-flex justify-content-center">
             <div class="card mb-3" style="width: 18rem;">
                 <center>
-                    <img class="card-img-top m-3" style="width: calc(100% - 2rem);" src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.6435-9/166236184_218591393149418_3631503204675004976_n.jpg?_nc_cat=100&ccb=1-3&_nc_sid=730e14&_nc_ohc=DqQv8DAOCpsAX9Cbfk3&_nc_ht=scontent-ort2-2.xx&oh=fa030e9a10979d03de5becbc110dd76d&oe=60926026">
+                    <img class="card-img-top m-3" style="width: calc(100% - 2rem); object-fit: cover; height: 250px;" src="../static/images/craft-supplies.png">
                 </center>
                 <div class="card-body">
                   <h5 class="card-title">Craft Supplies</h5>
@@ -53,7 +53,7 @@
         <div class="col-12 col-md-4 d-flex justify-content-center">
             <div class="card mb-3" style="width: 18rem;">
                 <center>
-                    <img class="card-img-top m-3" style="width: calc(100% - 2rem);" src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.6435-9/166236184_218591393149418_3631503204675004976_n.jpg?_nc_cat=100&ccb=1-3&_nc_sid=730e14&_nc_ohc=DqQv8DAOCpsAX9Cbfk3&_nc_ht=scontent-ort2-2.xx&oh=fa030e9a10979d03de5becbc110dd76d&oe=60926026">
+                    <img class="card-img-top m-3" style="width: calc(100% - 2rem); object-fit: cover; height: 250px;" src="../static/images/pickup-or-shipping.png">
                 </center>
                 <div class="card-body">
                   <h5 class="card-title">Pickup or Shipping</h5>
@@ -73,9 +73,9 @@
         </div>
         <div class="col-12 col-lg-6 d-flex flex-column justify-content-start align-items-center align-items-lg-start">
             <span class="d-flex flex-column justify-content-start align-items-start">
-                <iframe class="mb-3 p-3" src="https://www.facebook.com/plugins/comment_embed.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3D175768334098391%26id%3D166612741680617%26comment_id%3D177038710638020%26__cft__[0]%3DAZUFl8vZRy8WPpL7KFcNYEGm68rDcbzJjBqhB2FkW5Cb2dzddoM72oeC_zJbS25c9vEY_Q22IdMcs1JNW1rmvu-sv23KcL6QAn3Dygj3T54M278lkXr9sbONQSV36h8yMhY_GWDFz8jUuODtPB22NOQo%26__tn__%3DR]-R&width=560&include_parent=false&height=134&appId" width="500" data-width="100%" height="134" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
-                <iframe class="mb-3 p-3" src="https://www.facebook.com/plugins/comment_embed.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3D166660578342500%26id%3D166612741680617%26comment_id%3D168951038113454%26__cft__[0]%3DAZVAb0V5awSehmpRhx3tsR7F0335Jjy2ai8T1qY7FNMQRyDZHTfcpfGR1gV8URYsKs1fQihCGDO_CQTq6FYLsuXgcN0Vd7ZHo7Id9q7bIr7rz-N3gUkqxAd6Al6Nrzfj35L8co3qI4OjaKJyeBbIUUZo%26__tn__%3DR]-R&width=560&include_parent=false&height=153&appId" width="500" data-width="100%" height="153" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
-                <iframe class= "p-3" src="https://www.facebook.com/plugins/comment_embed.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3D175768334098391%26id%3D166612741680617%26comment_id%3D175784300763461%26__cft__[0]%3DAZXNWJ1adWPOZOIEa3S0MuOMieXqLlanNPCsWHw8RN_8McvQ5qzPJ5lMQVefmwcflgMNZ81vqAKywbwiHoQX_N4H5Niw7XCB1I5ga7N04nvhon-1x_E9PFMuM6x7RzHnHklowr2FbwTXTHGVegbEPxgM%26__tn__%3DR]-R&width=560&include_parent=false&height=114&appId" width="500" data-width="100%" height="114" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                <iframe class="post mb-3 p-3" src="https://www.facebook.com/plugins/comment_embed.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3D175768334098391%26id%3D166612741680617%26comment_id%3D177038710638020%26__cft__[0]%3DAZUFl8vZRy8WPpL7KFcNYEGm68rDcbzJjBqhB2FkW5Cb2dzddoM72oeC_zJbS25c9vEY_Q22IdMcs1JNW1rmvu-sv23KcL6QAn3Dygj3T54M278lkXr9sbONQSV36h8yMhY_GWDFz8jUuODtPB22NOQo%26__tn__%3DR]-R&width=560&include_parent=false&height=134&appId" data-width="100%" height="134" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                <iframe class="post mb-3 p-3" src="https://www.facebook.com/plugins/comment_embed.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3D166660578342500%26id%3D166612741680617%26comment_id%3D168951038113454%26__cft__[0]%3DAZVAb0V5awSehmpRhx3tsR7F0335Jjy2ai8T1qY7FNMQRyDZHTfcpfGR1gV8URYsKs1fQihCGDO_CQTq6FYLsuXgcN0Vd7ZHo7Id9q7bIr7rz-N3gUkqxAd6Al6Nrzfj35L8co3qI4OjaKJyeBbIUUZo%26__tn__%3DR]-R&width=560&include_parent=false&height=153&appId" data-width="100%" height="153" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+                <iframe class= "post p-3" src="https://www.facebook.com/plugins/comment_embed.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3D175768334098391%26id%3D166612741680617%26comment_id%3D175784300763461%26__cft__[0]%3DAZXNWJ1adWPOZOIEa3S0MuOMieXqLlanNPCsWHw8RN_8McvQ5qzPJ5lMQVefmwcflgMNZ81vqAKywbwiHoQX_N4H5Niw7XCB1I5ga7N04nvhon-1x_E9PFMuM6x7RzHnHklowr2FbwTXTHGVegbEPxgM%26__tn__%3DR]-R&width=560&include_parent=false&height=114&appId" data-width="100%" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
             </span>
         </div>
     </div>

@@ -17,6 +17,9 @@ class DevConfig(object):
     MAIL_USERNAME = 'kidskrafts4u@gmail.com'
     MAIL_PASSWORD = environ.get('email_password')
     STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+    UPLOAD_FOLDER = 'static/images'
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 class TestConfig(object):
     DEBUG = False
@@ -33,6 +36,9 @@ class TestConfig(object):
     MAIL_USERNAME = 'kidskrafts4u@gmail.com'
     MAIL_PASSWORD = environ.get('email_password')
     STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+    UPLOAD_FOLDER = 'static/images'
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 class ProdConfig(object):
     ENV = 'production'
@@ -48,6 +54,9 @@ class ProdConfig(object):
     MAIL_PASSWORD = environ.get('email_password')
     STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
     SESSION_TYPE = 'filesystem'
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+    UPLOAD_FOLDER = 'static/images'
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app_config = {
     'DEFAULT': DevConfig,

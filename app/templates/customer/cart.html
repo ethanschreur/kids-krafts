@@ -4,9 +4,11 @@
 
 {% block content %}
 <div class="container-fluid bg-white p-3" style="min-height: calc(100vh - 105px);">
+    <center class="m-5">
+        <span class="p-3 h2 rounded row justify-content-center"> 🛒 Your Cart </span>
+    </center>
     <div class="p-3 d-flex align-items-center justify-content-center">
-        <div class="col-12 col-md-8 col-lg-8 col-xl-6">
-            <center class="my-5"><span class="p-3 h2 bg-white rounded"> 🛒 Your Cart </span></center>
+        <div class="col-12 col-md-8 col-lg-8 col-xl-6" style="overflow: auto;">
             <table class="table">
                 <thead>
                     <tr>
@@ -20,7 +22,7 @@
                 {% for id in session['cart'] %}
                     <tr data-id="{{id}}">
                     <td><div class="my-3">{{session['cart'][id]['name']}}</div></td>
-                    <td> <img src="{{session['cart'][id]['image']}}" class="prod-img my-3"></img></td>
+                    <td> <img src="{{url_for('download_image', resource = session['cart'][id]['image'])}}" class="prod-img my-3"></img></td>
                     <td class="amount-input" data-id="{{id}}">
                     <input data-id="{{id}}" data-price="{{session['cart'][id]['price']}}" type="number" class="amount-input my-3 form-control h3" value="{{session['cart'][id]['amount']}}" min="1" style="width: 75px;">
                     </td>
@@ -32,7 +34,7 @@
         </div>
     </div>
      <div class="p-3 d-flex align-items-center justify-content-center">
-        <center><h5>Total: $<span id="total_cost">{{session['total']|round(2)}}</span><span></span></h5></div></center>
+        <center><h5>Total: $<span id="total_cost">{{'%0.2f'|format(session['total']|float)}}</span><span></span></h5></div></center>
         <center>
             <a class="m-3 btn btn-lg btn-primary text-white" href="/order_details">Order <i class="fas fa-box-open"></i></a>
         </center>
