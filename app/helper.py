@@ -140,3 +140,7 @@ def get_month_header(which, prev_month, curr_month, next_month, last_week, first
     else:
         month_header = f"{curr_month} {last_week[0]} - {next_month} {first_week[-1]}"
     return month_header 
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg'}
