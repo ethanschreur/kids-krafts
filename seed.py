@@ -1,5 +1,6 @@
 from app import create_app
+from os import path, environ
 
 app = create_app('PRODUCTION')
 
-app.run()
+print(environ.get('secret_key'))
