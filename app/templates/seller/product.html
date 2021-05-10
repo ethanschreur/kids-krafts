@@ -4,10 +4,9 @@
 
 {% block content %}
 <div class="row container-fluid">
-    <div class="col-md-2 d-lg-none"></div>
-    <div class="mb-3 mb-4 view-product col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-5">
-        <div class="p-3 view-product col-12">
-            <div class="p-3 m-3 view-product-container border rounded shadow-lg">
+    <div class="view-product col-xs-12 col-sm-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="col-12">
+            <div class="p-3 view-product-container border rounded shadow-lg">
                 <div class="row">
                     <div class="col-12 d-flex justify-content-center">
                         <div>
@@ -40,10 +39,9 @@
                 </div>
             </div>
         </div>
-        <br>
-        <div class="m-3 mt-0 p-3 add-subproduct-container border rounded shadow-lg d-none d-lg-block">
+        <div class="mt-0 p-3 add-subproduct-container border rounded shadow-lg d-none d-lg-block">
         <center><h2>Add a Subproduct</h2></center>
-        <form class="" action="/products/{{prod.id}}/subproducts" method="POST" enctype=multipart/form-data>
+        <form class="" action="/products/{{prod.id}}/subproducts" method="POST" enctype="multipart/form-data" style="overflow: auto;">
             <div class="col-12">
                     <label for="subproduct-name">Name</label>
                     <input type="text" name="subproduct_name" class="form-control" id="subproduct-name" placeholder="Name" required>
@@ -57,17 +55,11 @@
             </div>
             </form>
         </div>
-    </div>
-    <div class="col-md-2 d-lg-none"></div>    
-
-
-
-
+    </div>   
     <div class="edit-product col-xs-12 col-sm-12 col-md-12 col-lg-6 col-xl-7">
-        <div class="row">
-            <div class="col-12 p-3 edit-product border rounded shadow-lg">
+            <div class="p-3 edit-product-container border rounded shadow-lg">
             <center><h2>Edit Product</h2></center>
-            <form method="POST" action="/products/{{prod.id}}" enctype="multipart/form-data">
+            <form method="POST" action="/products/{{prod.id}}" enctype="multipart/form-data" style="overflow: auto">
                 <div class="row">
                     <div class="form-group col-12 col-sm-6">
                         <label for="product-name">Name</label>
@@ -106,9 +98,9 @@
                 <a href="/products/{{prod.id}}/delete" class="btn btn-danger mx-3">Delete</a>
             </form>
             </div>
-            <div class="m-3 p-3 add-subproduct-container border rounded shadow-lg d-block d-lg-none">
+            <div class="p-3 add-subproduct-container border rounded shadow-lg d-lg-none">
                 <center><h2>Add a Subproduct</h2></center>
-                <form class="mt-3" action="/products/{{prod.id}}/subproducts" method="POST" enctype=multipart/form-data>
+                <form class="mt-3" action="/products/{{prod.id}}/subproducts" method="POST" enctype="multipart/form-data" style="overflow: auto;">
                     <div class="row">
                     <div class="col-12 col-sm-6 col-lg-12">
                             <label for="subproduct-name">Name</label>
@@ -125,7 +117,7 @@
 
                     </form>
                 </div>
-            <div class="col-12 mb-3 p-3 edit-product-container border rounded shadow-lg">
+            <div class="mb-3 p-3 edit-product-container border rounded shadow-lg">
             <center><h2>Edit Subproducts</h2></center>
             <div class="row">
                 {% for sub in prod.subproducts %}
@@ -144,7 +136,6 @@
                     </form>
                 </div>
                 {% endfor %}
-            </div>
             </div>
         </div>
     </div>
