@@ -1,5 +1,5 @@
 """Initializes the flask app."""
-from flask import Flask, render_template, redirect, session, request, flash
+from flask import Flask, render_template, redirect, session, request, flash, jsonify, url_for
 from forms import LoginForm, ContactForm
 from models import connect_db, Product, db, Subproduct
 from config import app_config
@@ -9,6 +9,7 @@ from flask_mail import Message, Mail
 import random
 import calendar
 import datetime
+import stripe
 
 calendar.setfirstweekday(calendar.SUNDAY)
 
@@ -164,11 +165,8 @@ def contact():
             prod.append(session['cart'][id]['amount'])
             order.append(prod)
         form.message.data = f"""Order: {str(order)[1:-1]}
-
 Total: ${session['total']} (before shipping)
-
 Shipping Address:
-
 Notes:"""
         form.subject.data = "Shipping Request"
     if (form.validate_on_submit()):
@@ -236,4 +234,58 @@ def order_details():
     month_header = get_month_header(which, prev_month, curr_month, next_month, last_week, first_week)
     first_month = get_first_month(which, prev_month, curr_month)
     second_month = get_second_month(which, curr_month, next_month)
-    return render_template('/customer/order_details.html', credit=True, month_header=month_header, first_month = first_month, second_month = second_month, last_week = last_week, first_week = first_week) 
+    return render_template('/customer/order_details.html', credit=True, month_header=month_header, first_month = first_month, second_month = second_month, last_week = last_week, first_week = first_week)
+
+@app.route('/create-checkout-session', methods=['POST'])
+def pay():
+    pickup = request.json['pickup']
+    month = request.json['month']
+    session['datetime'] = month + ' ' + pickup
+    items = []
+    for id in session['cart']:
+        items.append({
+        'price_data': {
+            'currency': 'usd',
+            'product_data': {
+            'name': session['cart'][id]['name'],
+            },
+            'unit_amount': round(float(session['cart'][id]['price'])*100),
+        },
+        'quantity': session['cart'][id]['amount'],
+        });
+    stripe.api_key = app.config['STRIPE_SECRET_KEY']
+    stripe_session = stripe.checkout.Session.create(
+    payment_method_types=['card'],
+    line_items=items,
+    mode='payment',
+    success_url = url_for('success', _external=True) + '?session_id={CHECKOUT_SESSION_ID}',
+    cancel_url = url_for('order_details', _external=True),
+    )
+    return jsonify(id=stripe_session.id)
+
+@app.route('/success')
+   # display order and pickup information, remove cart from session.
+def success():
+    try:
+        stripe.api_key = app.config['STRIPE_SECRET_KEY']
+        stripe_session = stripe.checkout.Session.retrieve(request.args.get('session_id'))
+        customer = stripe.Customer.retrieve(stripe_session.customer)
+        name = stripe.PaymentIntent.retrieve(stripe_session.payment_intent).charges.data[0].billing_details.name;
+        email = customer.email
+        datetime = session['datetime']
+        if 'cart' in session:
+            del session['cart']
+        session['total']=0
+        parts = datetime.split(" ")
+        day=parts[0] + ' ' + parts[1]
+        time=''
+        if (parts[2] == 'AM'):
+            time="8 and 12 AM"
+        else:
+            time="12 and 6 PM"
+        return render_template('/customer/success.html', email=email, name=name, day=day, time=time)
+    except:
+        return redirect('/shop')
+
+
+    

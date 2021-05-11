@@ -77,3 +77,28 @@ $('.date-check').change(function(evt) {
 	$('.date-check').prop('checked', false);
 	$(evt.target).prop('checked', true);
 });
+
+$('.checkout-button').click(async function(evt) {
+	const dateTimes = document.querySelectorAll('.date-check');
+	let count = 0;
+	let selected = '';
+	for (const opts of dateTimes) {
+		if ($(opts).prop('checked')) {
+			count++;
+			selected = opts;
+		}
+	}
+	if (count === 1) {
+		const stripe = Stripe(
+			'pk_test_51IjncDG7eCWHTgYHTQP30rZivUhfi0DagZW3FDTMmLD4enV4cRWnx8B6ftGWNEvFaiXUdPe5Md9LU4V4RHqo2cMq00byMZcJqY'
+		);
+		let month = '';
+		if (parseInt(selected.id.substring(0, 2), 10) < 15) {
+			month = $(selected).data().secondMonth;
+		} else {
+			month = $(selected).data().firstMonth;
+		}
+		const sessionId = await axios.post('/create-checkout-session', { pickup: selected.id, month });
+		return stripe.redirectToCheckout({ sessionId: sessionId.data.id });
+	}
+});

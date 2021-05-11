@@ -1,7 +1,6 @@
 from unittest import TestCase
 from app import create_app
 from models import db, Order, Purchase, Product, Subproduct
-import datetime
 
 class ModelsTestCase(TestCase):
     def setUp(self):
@@ -32,7 +31,7 @@ class ModelsTestCase(TestCase):
 
         # add an order including one purchase row for two kits
         purchase = {'product_id': new_product.id, 'number_ordered': 2, 'number_made': 0}
-        new_order = Order(stripe_order_id = "fakestripeid", first_name = "First", last_name = "Last", date_time = datetime.datetime.now(), email = "fake@gmail.com", status = "received", notes = "",)
+        new_order = Order(stripe_order_id = "fakestripeid", first_name = "First", last_name = "Last", pickup_time = 'April 25 AM', email = "fake@gmail.com", status = "received", notes = "",)
         db.session.add(new_order)
         db.session.commit()
         new_purchase = Purchase(order_id = new_order.id, product_id = purchase["product_id"], number_ordered = purchase["number_ordered"], number_made = purchase["number_made"])
@@ -64,7 +63,7 @@ class ModelsTestCase(TestCase):
         self.assertEqual(o.stripe_order_id, "fakestripeid")
         self.assertEqual(o.first_name, "First")
         self.assertEqual(o.last_name, "Last")
-        self.assertEqual(type(o.date_time), datetime.datetime)
+        self.assertEqual(o.pickup_time, "April 25 AM")
         self.assertEqual(o.email, "fake@gmail.com")
         self.assertEqual(o.status, "received")
         self.assertEqual(o.notes, "")
