@@ -356,3 +356,12 @@ def update_order(id):
     db.session.add(order)
     db.session.commit()
     return redirect(f'/orders/{id}')
+
+@app.route('/orders/<id>/delete', methods=['GET'])
+def delete_order(id):
+    if ("seller_email" not in session):
+        return redirect('/login')
+    order = Order.query.get(id)
+    db.session.delete(order)
+    db.session.commit()
+    return redirect('/orders')

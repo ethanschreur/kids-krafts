@@ -260,3 +260,18 @@ class SellerRoutesTestCase(TestCase):
             self.assertIn('123', resp.get_data(as_text=True))
             self.assertIn('Edited Name', resp.get_data(as_text=True))
             self.assertIn('kidskrafts4u@gmail.com', resp.get_data(as_text=True))
+
+            # test deleting an order with seller_email not in the session
+            client.get('/logout')
+            resp = client.get('/orders/1/delete', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Edit Order', resp.get_data(as_text=True))
+
+            # test deleting an order with seller_email in the sesison
+            client.post('/login', data={'email':os.environ.get('seller_email'), 'password':os.environ.get('seller_password')})
+            resp = client.get('/orders/1/delete', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Add an Order', resp.get_data(as_text=True))
+            self.assertIn('<h2>Orders</h2>', resp.get_data(as_text=True))
+            resp = client.get('/orders/1', follow_redirects=True)
+            self.assertNotEqual(resp.status_code, 200)
