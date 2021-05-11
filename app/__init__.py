@@ -332,3 +332,27 @@ def add_order():
     db.session.add(new_order)
     db.session.commit()
     return redirect('/orders')
+
+@app.route('/orders/<id>', methods=['GET'])
+def get_order(id):
+    if ("seller_email" not in session):
+        return redirect('/login')
+    order = Order.query.get_or_404(id)
+    return render_template('seller/order.html', order = order)
+
+@app.route('/orders/<id>', methods=['POST'])
+def update_order(id):
+    if ("seller_email" not in session):
+        return redirect('/login')
+    order = Order.query.get_or_404(id)
+    order.stripe_order_id = request.form['order_stripe_order_id']
+    order.name = request.form['order_name']
+    order.pickup_time = request.form['order_pickup_time']
+    order.email = request.form['order_email']
+    order.status = request.form['order_status']
+    order.payment_type = request.form['order_payment_type']
+    order.payment_status = request.form['order_payment_status']
+    order.notes = request.form['order_notes']
+    db.session.add(order)
+    db.session.commit()
+    return redirect(f'/orders/{id}')

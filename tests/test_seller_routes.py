@@ -231,3 +231,32 @@ class SellerRoutesTestCase(TestCase):
             self.assertIn('ethanschreur@icloud.com', resp.get_data(as_text=True))
             self.assertIn('April 25 PM', resp.get_data(as_text=True))
             self.assertIn('these are notes', resp.get_data(as_text=True))
+        
+    def test_updating_orders(self):
+        with self.client as client:
+            # test going to an order with seller_email not in the session
+            client.get('/logout')
+            resp = client.get('/orders/1', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Edit Order', resp.get_data(as_text=True))
+
+            # test going to an order page with seller_email in the session
+            client.post('/login', data={'email':os.environ.get('seller_email'), 'password':os.environ.get('seller_password')})
+            resp = client.get('/orders/1', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Edit Order', resp.get_data(as_text=True))
+
+            # # test editting an order with seller_email not in the session
+            client.get('/logout')
+            resp = client.post('/orders/1', follow_redirects=True, data={'order_stripe_order_id': '123', 'order_name': 'Edited Name', 'order_pickup_time': 'April 24 AM', 'order_email': 'kidskrafts4u@gmail.com', 'order_status': 'ordered', 'order_payment_type': 'stripe', 'order_payment_status': 'paid', 'order_notes': 'edit notes'})
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Edit Order', resp.get_data(as_text=True))
+   
+            # test editting an order with seller_email in the session
+            client.post('/login', data={'email':os.environ.get('seller_email'), 'password':os.environ.get('seller_password')})
+            resp = client.post('/orders/1', follow_redirects=True, data={'order_stripe_order_id': '123', 'order_name': 'Edited Name', 'order_pickup_time': 'April 24 AM', 'order_email': 'kidskrafts4u@gmail.com', 'order_status': 'ordered', 'order_payment_type': 'stripe', 'order_payment_status': 'paid', 'order_notes': 'edit notes'})
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Edit Order', resp.get_data(as_text=True))
+            self.assertIn('123', resp.get_data(as_text=True))
+            self.assertIn('Edited Name', resp.get_data(as_text=True))
+            self.assertIn('kidskrafts4u@gmail.com', resp.get_data(as_text=True))
