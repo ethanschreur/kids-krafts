@@ -78,6 +78,10 @@ class SellerRoutesTestCase(TestCase):
             self.assertIn('Add a Product', resp.get_data(as_text=True))
             self.assertIn('<h2>Products</h2>', resp.get_data(as_text=True))
 
+            # test going to the products with a filter
+            resp = client.get('/products?order_by=selling_status&value=selling', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+
             # test submitting the add-product form with seller_email NOT in session
             client.get('/logout')
             resp = client.post('/products', follow_redirects=True, data=self.product_data) 
