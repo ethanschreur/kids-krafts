@@ -297,7 +297,6 @@ class SellerRoutesTestCase(TestCase):
             self.assertIn('Edit Purchases', resp.get_data(as_text=True))
             self.assertIn('February Kit 21', resp.get_data(as_text=True))
 
-
             # test editting a purchase with seller_email not in the session
             client.get('/logout')
             resp = client.post('/orders/2/purchases/2', follow_redirects=True, data={'number_ordered': 8, 'number_made': 8})
