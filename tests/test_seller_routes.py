@@ -308,3 +308,15 @@ class SellerRoutesTestCase(TestCase):
             resp = client.post('/orders/2/purchases/2', follow_redirects=True, data={'number_ordered': 8, 'number_made': 8})
             self.assertEqual(resp.status_code, 200)
             self.assertIn('value="8"', resp.get_data(as_text=True))
+
+            # test deleting a purchase with seller_email not in the session
+            client.get('/logout')
+            resp = client.get('/orders/2/purchases/2/delete', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Login', resp.get_data(as_text=True))
+
+            # test deleting a purchase with seller_email in the session
+            client.post('/login', data={'email':os.environ.get('seller_email'), 'password':os.environ.get('seller_password')})
+            resp = client.get('/orders/2/purchases/2/delete', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('<pan>February Kit 21</span>', resp.get_data(as_text=True))

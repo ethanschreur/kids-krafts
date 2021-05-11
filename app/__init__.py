@@ -394,3 +394,12 @@ def update_purchases(id, pid):
     db.session.add(purchase)
     db.session.commit()
     return redirect(f'/orders/{id}')
+
+@app.route('/orders/<id>/purchases/<pid>/delete', methods=["GET"])
+def delete_purchases(id, pid):
+    if ('seller_email' not in session):
+        return redirect('/login')
+    purchase = Purchase.query.get(pid)
+    db.session.delete(purchase)
+    db.session.commit()
+    return redirect(f'/orders/{id}')
