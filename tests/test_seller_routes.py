@@ -296,3 +296,15 @@ class SellerRoutesTestCase(TestCase):
             self.assertIn('Add a Purchase', resp.get_data(as_text=True))
             self.assertIn('Edit Purchases', resp.get_data(as_text=True))
             self.assertIn('February Kit 21', resp.get_data(as_text=True))
+
+            # test editting a purchase with seller_email not in the session
+            client.get('/logout')
+            resp = client.post('/orders/2/purchases/2', follow_redirects=True, data={'number_ordered': 8, 'number_made': 8})
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('value="8"', resp.get_data(as_text=True))
+
+            # test editting a purchase with seller_email in the session
+            client.post('/login', data={'email':os.environ.get('seller_email'), 'password':os.environ.get('seller_password')})
+            resp = client.post('/orders/2/purchases/2', follow_redirects=True, data={'number_ordered': 8, 'number_made': 8})
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('value="8"', resp.get_data(as_text=True))
