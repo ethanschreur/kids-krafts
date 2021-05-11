@@ -59,7 +59,6 @@ def products():
     if ("seller_email" not in session):
         return redirect('/login')
     products = Product.query.all()
-    print(request.args)
     if 'order_by' in request.args:
         print('here')
         products = filter_products(request.args['order_by'], request.args['value'], products)

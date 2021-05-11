@@ -13,8 +13,6 @@ def filter_products(column, value, products):
                 prods.append(prod)
     return prods
 
-
-
 def filter_orders(column, value, orders):
     """Filter orders table."""
     ords=[]
