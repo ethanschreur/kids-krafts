@@ -135,6 +135,5 @@ class SellerRoutesTestCase(TestCase):
             resp = client.post('/create-checkout-session', json={'pickup': '25 AM', 'month': 'April'})
             session_id = (json.loads(resp.get_data())['id'])
             self.assertEqual(type(json.loads(resp.get_data())['id']), str)
-
             resp = client.get(f'/success?{session_id}')
             self.assertEqual(302, resp.status_code)
