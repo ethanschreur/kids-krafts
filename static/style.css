@@ -144,6 +144,11 @@ body {
 	border-radius: 15px;
 }
 
+th a {
+	color: black;
+	text-decoration: none;
+}
+
 .filter {
 	color: black;
 }

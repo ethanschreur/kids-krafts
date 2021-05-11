@@ -219,6 +219,14 @@ class SellerRoutesTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn('<h2>Orders</h2>', resp.get_data(as_text=True))
 
+            # test going to the products with filters
+            resp = client.get('/orders?order_by=order_status&value=made', follow_redirects =True)
+            self.assertEqual(resp.status_code, 200)
+            resp = client.get('/orders?pickup_time=April+2+AM', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+            resp = client.get('/orders?order_by=name', follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+
              # test submitting the add-orders form with seller_email NOT in session
             client.get('/logout')
             resp = client.post('/orders', follow_redirects=True, data=self.order_data) 
