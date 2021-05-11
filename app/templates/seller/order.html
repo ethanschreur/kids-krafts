@@ -126,7 +126,7 @@
                         <div class="form-group">
                         <span>{{prod_info[purchase.product_id][0]}}</span>
                         <br>
-                        <img src="{{url_for('download_image', resource = prod_info[purchase.product_id][1])}}" class="prod-img mt-3"></img>
+                        <img src="{{'https://kids-krafts.s3.us-east-2.amazonaws.com/' +  prod_info[purchase.product_id][1]}}" class="prod-img mt-3"></img>
                     </div>
                     </center>
                     <div class="d-flex justify-content-center">

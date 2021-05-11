@@ -85,7 +85,7 @@
             <tbody>
                   <tr class="table-row" data-id={{id}} data-type="product">
                     <td>{{prod_info[id].name}}</td>
-                    <td><img src="{{url_for('download_image', resource = prod_info[id].image_url)}}" class="prod-img"></img></td>
+                    <td><img src="{{'https://kids-krafts.s3.us-east-2.amazonaws.com/' + prod_info[id].image_url}}" class="prod-img"></img></td>
                     <td>{{prod_info[id].amount_ordered}}</td>
                     <td>{{prod_info[id].amount_made}}</td>
                     <td>{{prod_info[id].amount_ordered - prod_info[id].amount_made}}</td>

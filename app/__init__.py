@@ -18,14 +18,6 @@ calendar.setfirstweekday(calendar.SUNDAY)
 
 app = Flask(__name__, static_folder='../static',)
 
-@app.route('/download/<resource>')
-def download_image(resource):
-    """ resource: name of the file to download"""
-    return s3_client.generate_presigned_url('get_object',
-                                                    Params={'Bucket': 'kids-krafts',
-                                                            'Key': resource},
-                                                    ExpiresIn=expiration)
-
 @app.template_filter('shuffle')
 def filter_shuffle(seq):
     result = list(seq)
@@ -39,7 +31,7 @@ def create_app(config_name):
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
-    """Produce login form or handle login or instant login."""
+    """Show login form or handle login or instant login."""
     if ("seller_email" in session):
         return redirect('/dashboard')
     if request.method == 'POST':
@@ -110,11 +102,11 @@ def add_product():
         filename = secure_filename(file.filename)
         bucket = "kids-krafts"
         s3 = boto3.client('s3')
-        response = s3.upload_file(app.config['UPLOAD_FOLDER'] + '/' + filename, bucket, filename)
+        s3.upload_file(app.config['UPLOAD_FOLDER'] + '/' + filename, bucket, filename)
     new_product = Product(
         name=request.form['product_name'],
         price=float(request.form['product_price']),
-        image_url = '../../static/images/' + file.filename,
+        image_url = file.filename,
         category=request.form["product_selling_status"])
     db.session.add(new_product)
     db.session.commit()
@@ -139,8 +131,8 @@ def update_product(id):
         filename = secure_filename(file.filename)
         bucket = "kids-krafts"
         s3 = boto3.client('s3')
-        response = s3.upload_file(app.config['UPLOAD_FOLDER'] + '/' + filename, bucket, filename)
-        product.image_url = '../../static/images/' + file.filename,
+        s3.upload_file(app.config['UPLOAD_FOLDER'] + '/' + filename, bucket, filename)
+        product.image_url = file.filename,
     product.name = request.form['product_name']
     product.price = request.form['product_price']
     product.category = request.form['product_selling_status']
@@ -168,11 +160,11 @@ def add_subproduct(id):
         filename = secure_filename(file.filename)
         bucket = "kids-krafts"
         s3 = boto3.client('s3')
-        response = s3.upload_file(app.config['UPLOAD_FOLDER'] + '/' + filename, bucket, filename)
+        s3.upload_file(app.config['UPLOAD_FOLDER'] + '/' + filename, bucket, filename)
     new_subproduct = Subproduct(
         product_id = id,
         name = request.form['subproduct_name'],
-        image_url = '../../static/images/' + file.filename,
+        image_url = file.filename,
     )
     db.session.add(new_subproduct)
     db.session.commit()
@@ -190,8 +182,8 @@ def update_subproducts(id, sid):
         filename = secure_filename(file.filename)
         bucket = "kids-krafts"
         s3 = boto3.client('s3')
-        response = s3.upload_file(app.config['UPLOAD_FOLDER'] + '/' + filename, bucket, filename)
-        subproduct.image_url = '../../static/images/' + file.filename
+        s3.upload_file(app.config['UPLOAD_FOLDER'] + '/' + filename, bucket, filename)
+        subproduct.image_url = file.filename
     subproduct.name = request.form['subproduct_name']
     db.session.add(subproduct)
     db.session.commit()
@@ -257,12 +249,16 @@ def about_page():
 
 @app.route('/cart', methods=['GET'])
 def cart_page():
-    if 'total' not in session:
-        session['total'] = 0
-    total = 0
-    for id in session['cart']:
-        total = total + (float(session['cart'][id]['price']) * float(session['cart'][id]['amount']))
-    session['total'] = round(total, 2)
+    try:
+        if 'total' not in session:
+            session['total'] = 0
+        total = 0
+        for id in session['cart']:
+            total = total + (float(session['cart'][id]['price']) * float(session['cart'][id]['amount']))
+        session['total'] = round(total, 2)
+    except: 
+        session.ckear()
+        return redirect('/shop')
     return render_template('/customer/cart.html', order_details=True)
 
 @app.route('/cart', methods=['POST'])

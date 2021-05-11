@@ -8,17 +8,17 @@
         {% for image in images|shuffle %}
         {% if loop.index <= 2 %}
         <div class="top-image col-6 col-md-3 col-xl-2 bg-white p-3" style="overflow: hidden;">
-            <img class="border-0" style="object-fit: cover; max-height: 100%; min-height: 100%; max-width: 100%; min-width: 100%;" src="{{url_for('download_image', resource = image)}}" alt="">
+            <img class="border-0" style="object-fit: cover; max-height: 100%; min-height: 100%; max-width: 100%; min-width: 100%;" src="{{'https://kids-krafts.s3.us-east-2.amazonaws.com/' + image}}" alt="">
         </div> 
          {% endif %}
         {% if loop.index > 2 and loop.index <= 4 %}
         <div class="top-image col-6 col-md-3 col-xl-2 bg-white p-3 d-none d-md-block" style="overflow: hidden; height: 300px;">
-            <img class="border-0" style="object-fit: cover; max-height: 100%; min-height: 100%; max-width: 100%; min-width: 100%;" src="{{url_for('download_image', resource = image)}}" alt="">
+            <img class="border-0" style="object-fit: cover; max-height: 100%; min-height: 100%; max-width: 100%; min-width: 100%;" src="{{'https://kids-krafts.s3.us-east-2.amazonaws.com/' +  image}}" alt="">
         </div> 
          {% endif %}
         {% if loop.index > 4 and loop.index <= 6 %}
         <div class="top-image col-6 col-md-3 col-xl-2 bg-white p-3 d-none d-xl-block" style="overflow: hidden; height: 300px;">
-            <img class="border-0" style="object-fit: cover; max-height: 100%; min-height: 100%; max-width: 100%; min-width: 100%;" src="{{url_for('download_image', resource = image)}}" alt="">
+            <img class="border-0" style="object-fit: cover; max-height: 100%; min-height: 100%; max-width: 100%; min-width: 100%;" src="{{'https://kids-krafts.s3.us-east-2.amazonaws.com/' + image}}" alt="">
         </div> 
          {% endif %}
         {% endfor %}

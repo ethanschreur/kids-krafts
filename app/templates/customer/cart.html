@@ -22,7 +22,7 @@
                 {% for id in session['cart'] %}
                     <tr data-id="{{id}}">
                     <td><div class="my-3">{{session['cart'][id]['name']}}</div></td>
-                    <td> <img src="{{url_for('download_image', resource = session['cart'][id]['image'])}}" class="prod-img my-3"></img></td>
+                    <td> <img src="{{session['cart'][id]['image']}}" class="prod-img my-3"></img></td>
                     <td class="amount-input" data-id="{{id}}">
                     <input data-id="{{id}}" data-price="{{session['cart'][id]['price']}}" type="number" class="amount-input my-3 form-control h3" value="{{session['cart'][id]['amount']}}" min="1" style="width: 75px;">
                     </td>
