@@ -52,6 +52,15 @@ def logout():
 def get_dashboard():
     if ("seller_email" not in session):
         return redirect('/login')
+    products = Product.query.all()
+    prod_info = {}
+    for prod in products:
+        product = {}
+        product['name']=prod.name
+        product['image_url']=prod.image_url
+        product['amount_ordered']=0
+        product['amount_made']=0
+        prod_info[prod.id] = product
     revenue = 0
     kits_bought = 0
     crafts_bought = 0
@@ -59,6 +68,8 @@ def get_dashboard():
     purchases = Purchase.query.all()
     unique_emails = []
     for purchase in purchases:
+        prod_info[purchase.product_id]["amount_ordered"] = prod_info[purchase.product_id]["amount_ordered"] + purchase.number_ordered
+        prod_info[purchase.product_id]["amount_made"] = prod_info[purchase.product_id]["amount_made"] + purchase.number_made
         purchase_cost = Product.query.get(purchase.product_id).price * purchase.number_ordered
         revenue = revenue + purchase_cost
         kits_bought = kits_bought + (purchase.number_ordered)
@@ -68,7 +79,7 @@ def get_dashboard():
             unique_emails.append(email)
     revenue = f'${round(revenue, 2)}'
     unique_customers = len(unique_emails)
-    return render_template('seller/dashboard.html', revenue=revenue, kits_bought=kits_bought, crafts_bought=crafts_bought, unique_customers=unique_customers) 
+    return render_template('seller/dashboard.html', prod_info=prod_info, revenue=revenue, kits_bought=kits_bought, crafts_bought=crafts_bought, unique_customers=unique_customers) 
 
 @app.route('/products', methods=['GET'])
 def products():
@@ -76,7 +87,6 @@ def products():
         return redirect('/login')
     products = Product.query.all()
     if 'order_by' in request.args:
-        print('here')
         products = filter_products(request.args['order_by'], request.args['value'], products)
     return render_template('seller/products.html', products=products)
 
