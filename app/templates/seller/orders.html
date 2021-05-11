@@ -1,10 +1,38 @@
 {% extends 'seller/seller_base.html' %}
 
-{% block title %}Products{% endblock %}
+{% block title %}Orders{% endblock %}
 
 {% block content %}
 <div class="row container-fluid">
-    <div class="view-orders m-3 col-12">
+    <div class="add-order col-lg-4 col-12">
+        <div class="p-3 add-order-container border rounded shadow-lg bg-white">
+        <center><h2>Add an Order</h2></center>
+    <form method="POST" action="/orders">
+        <div class=form-group">
+            <label for="order-name">Name</label>
+            <input type="text" name="order_name" class="form-control" id="order-name" required placeholder="Full Name">
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="order-email">Email</label>
+            <input type="email" name="order_email" class="form-control" id="order-email" required placeholder="Email">
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="order-pickup-time">Pickup Time</label>
+            <input type="text" name="order_pickup_time" id="order-pickup-time" class="form-control" placeholder="April 25 AM" required>
+        </div>
+        <br>
+        <div class="form-group">
+            <label for="order-notes">Notes</label>
+            <textarea name="order_notes" id="order-notes" class="form-control" placeholder="Notes" rows="3"></textarea>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+    </div>
+    </div>
+    <div class="view-orders col-lg-8 col-12">
         <div class="p-3 view-orders-container border rounded shadow-lg bg-white">
             <center><h2>Orders</h2></center>
             <div style="overflow: auto;">
@@ -14,7 +42,7 @@
                       <th scope="col">Name</th>
                       <th scope="col">Email</th>
                       <th scope="col">Pickup Time</th>
-                      <th scope="col">Status</th>
+                      <th scope="col">Order Status</th>
                       <th scope="col">Payment Type</th>
                       <th scope="col">Payment Status</th>
                       <th scope="col">Notes</th>

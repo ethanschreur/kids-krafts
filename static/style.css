@@ -68,16 +68,15 @@ body {
 	background-size: cover;
 }
 
-.add-product {
-	height: 100%;
-}
-
 .view-products,
-.view-orders {
+.view-orders,
+.add-product,
+.add-order {
 	height: 100%;
 }
 
 .add-product-container,
+.add-order-container,
 .view-products-container,
 .view-orders-container {
 	display: flex-inline;

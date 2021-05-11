@@ -11,7 +11,7 @@ class SellerRoutesTestCase(TestCase):
         # define some useful class variables
         self.product_data = {'product_name': 'Easter Kit', 'product_price': '5.99', 'product_image': 'https://scontent-ort2-2.xx.fbcdn.net/v/t1.0-9/165711988_218591189816105_7202222520073647668_o.jpg?_nc_cat=107&ccb=1-3&_nc_sid=730e14&_nc_ohc=THCcNKVPaEIAX9ltqbV&_nc_ht=scontent-ort2-2.xx&oh=85a30cd8715887c1d4e7111e499330e1&oe=6086013E', 'product_selling_status': 'Not Selling'}
         self.subproduct_data = {'subproduct_name': 'name', 'subproduct_image': 'image'}
-
+        self.order_data = {'order_name': 'Ethan Schreur', 'order_pickup_time': 'April 25 PM', 'order_email': 'ethanschreur@icloud.com', 'order_notes': 'these are notes'}
 
     def test_login_and_logout(self):
         with self.client as client:
@@ -208,8 +208,26 @@ class SellerRoutesTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertNotIn('<h2>Orders</h2>', resp.get_data(as_text=True))
 
-            # test going to the products with seller_email in session
+            # test going to the orders with seller_email in session
             client.post('/login', data={'email':os.environ.get('seller_email'), 'password': os.environ.get('seller_password')})
             resp=client.get('/orders', follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
             self.assertIn('<h2>Orders</h2>', resp.get_data(as_text=True))
+
+             # test submitting the add-orders form with seller_email NOT in session
+            client.get('/logout')
+            resp = client.post('/orders', follow_redirects=True, data=self.order_data) 
+            self.assertEqual(resp.status_code, 200)
+            self.assertNotIn('Add an Order', resp.get_data(as_text=True))
+            self.assertNotIn('<h2>Orders</h2>', resp.get_data(as_text=True))
+
+            # test submitting the add-orders form with seller_email in session
+            client.post('/login', data={'email':os.environ.get('seller_email'), 'password':os.environ.get('seller_password')})
+            resp=client.post('/orders', follow_redirects=True, data=self.order_data)
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Add an Order', resp.get_data(as_text=True))
+            self.assertIn('<h2>Orders</h2>', resp.get_data(as_text=True))
+            self.assertIn('Ethan Schreur', resp.get_data(as_text=True))
+            self.assertIn('ethanschreur@icloud.com', resp.get_data(as_text=True))
+            self.assertIn('April 25 PM', resp.get_data(as_text=True))
+            self.assertIn('these are notes', resp.get_data(as_text=True))
