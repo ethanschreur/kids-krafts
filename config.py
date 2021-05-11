@@ -20,6 +20,7 @@ class DevConfig(object):
 
 class TestConfig(object):
     DEBUG = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://postgres:postgres@postgres:5432/kids_krafts_test'
     WTF_CSRF_ENABLED = False
     SQLALCHEMY_ECHO = False

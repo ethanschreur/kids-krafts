@@ -31,7 +31,7 @@ class ModelsTestCase(TestCase):
 
         # add an order including one purchase row for two kits
         purchase = {'product_id': new_product.id, 'number_ordered': 2, 'number_made': 0}
-        new_order = Order(stripe_order_id = "fakestripeid", first_name = "First", last_name = "Last", pickup_time = 'April 25 AM', email = "fake@gmail.com", status = "received", notes = "",)
+        new_order = Order(stripe_order_id = "fakestripeid", name = "First Last", pickup_time = "May 25 AM", email = "fake@gmail.com", status = "ordered", payment_type="stripe", payment_status="paid", notes = "")
         db.session.add(new_order)
         db.session.commit()
         new_purchase = Purchase(order_id = new_order.id, product_id = purchase["product_id"], number_ordered = purchase["number_ordered"], number_made = purchase["number_made"])
@@ -61,11 +61,12 @@ class ModelsTestCase(TestCase):
         # test the row for the added order
         o = Order.query.filter_by(stripe_order_id = "fakestripeid").first()
         self.assertEqual(o.stripe_order_id, "fakestripeid")
-        self.assertEqual(o.first_name, "First")
-        self.assertEqual(o.last_name, "Last")
-        self.assertEqual(o.pickup_time, "April 25 AM")
+        self.assertEqual(o.name, "First Last")
+        self.assertEqual(o.pickup_time, "May 25 AM")
         self.assertEqual(o.email, "fake@gmail.com")
-        self.assertEqual(o.status, "received")
+        self.assertEqual(o.status, "ordered")
+        self.assertEqual(o.payment_type, "stripe")
+        self.assertEqual(o.payment_status, "paid")
         self.assertEqual(o.notes, "")
         self.assertEqual(len(o.purchases), 1)
 
@@ -77,7 +78,7 @@ class ModelsTestCase(TestCase):
         self.assertEqual(p.product_id, prod.id)
         self.assertEqual(p.number_ordered, 2)
         self.assertEqual(p.number_made, 0)
-        self.assertEqual(p.order.first_name, "First")
+        self.assertEqual(p.order.name, "First Last")
 
     def test_product_purchases_relationships(self):
         # test the relationships between a purchase and its product that is being purchased

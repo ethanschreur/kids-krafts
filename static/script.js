@@ -6,7 +6,11 @@ $('.table-row').click(function(evt) {
 	} else {
 		id = $(firstParent).parent().data().id;
 	}
-	window.location.href = `/products/${id}`;
+	if ($(firstParent).data().type === 'order') {
+		// window.location.href = `/orders/${id}`;
+	} else {
+		window.location.href = `/products/${id}`;
+	}
 });
 
 function calcTotalCost() {

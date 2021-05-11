@@ -1,7 +1,7 @@
 """Initializes the flask app."""
 from flask import Flask, render_template, redirect, session, request, flash, jsonify, url_for
 from forms import LoginForm, ContactForm
-from models import connect_db, Product, db, Subproduct
+from models import connect_db, Product, db, Subproduct, Order, Purchase
 from config import app_config
 from .helper import get_two_weeks_options, whichOption, get_last_week, get_first_week, get_new_first_week, get_new_last_week, get_next_month, get_prev_month, get_first_month, get_second_month, get_month_header
 import os
@@ -140,6 +140,7 @@ def landing_page():
     path = os.getcwd() + '/static/links.txt'
     images_file = open(path, 'r')
     images = images_file.readlines()
+    images_file.close()
     return render_template('/customer/landing.html', images=images)
 
 @app.route('/shop')
@@ -273,7 +274,25 @@ def success():
         name = stripe.PaymentIntent.retrieve(stripe_session.payment_intent).charges.data[0].billing_details.name;
         email = customer.email
         datetime = session['datetime']
+        stripe_order_id = request.args.get('session_id')
+        datetime = session['datetime']
+        # add new order and purchases and clear cart
+        new_order = Order(
+            stripe_order_id=stripe_order_id,
+            name=name,
+            pickup_time = datetime,
+            email = email,
+            status = "ordered",
+            payment_type="stripe",
+            payment_status="paid",
+            )
+        db.session.add(new_order)
+        db.session.commit()
         if 'cart' in session:
+            for id in session['cart']:
+                new_purchase = Purchase(order_id=new_order.id, product_id=id, number_ordered=session['cart'][id]['amount'], number_made=0)
+                db.session.add(new_purchase)
+                db.session.commit()
             del session['cart']
         session['total']=0
         parts = datetime.split(" ")
@@ -287,5 +306,9 @@ def success():
     except:
         return redirect('/shop')
 
-
-    
+@app.route('/orders', methods=['GET'])
+def orders():
+    if ("seller_email" not in session):
+        return redirect('/login')
+    orders = Order.query.all()
+    return render_template('seller/orders.html', orders=orders)
