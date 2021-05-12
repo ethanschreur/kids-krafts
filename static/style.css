@@ -142,9 +142,16 @@ th a {
 	height: 300px;
 }
 
+.shop {
+	top: calc(150px - 2.1rem);
+}
+
 @media screen and (max-width: 550px) {
 	.top-image {
 		height: 200px;
+	}
+	.shop {
+		top: calc((100px - 1.65rem));
 	}
 }
 

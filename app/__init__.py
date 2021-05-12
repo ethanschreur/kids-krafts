@@ -257,7 +257,7 @@ def cart_page():
             total = total + (float(session['cart'][id]['price']) * float(session['cart'][id]['amount']))
         session['total'] = round(total, 2)
     except: 
-        session.ckear()
+        session.clear()
         return redirect('/shop')
     return render_template('/customer/cart.html', order_details=True)
 
