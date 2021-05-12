@@ -17,6 +17,9 @@ class DevConfig(object):
     MAIL_USERNAME = 'kidskrafts4u@gmail.com'
     MAIL_PASSWORD = environ.get('email_password')
     STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+    UPLOAD_FOLDER = 'static/images'
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 class TestConfig(object):
     DEBUG = False
@@ -33,10 +36,15 @@ class TestConfig(object):
     MAIL_USERNAME = 'kidskrafts4u@gmail.com'
     MAIL_PASSWORD = environ.get('email_password')
     STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+    UPLOAD_FOLDER = 'static/images'
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 class ProdConfig(object):
+    ENV = 'production'
+    WTF_CSRF_ENABLED = False
     DEBUG = False
-    DATABASE_URL = ""
+    SQLALCHEMY_DATABASE_URI = environ.get('DATABASE_URL')
     SECRET_KEY = environ.get('secret_key')
     MAIL_SERVER = "smtp.gmail.com"
     MAIL_PORT = 465
@@ -45,6 +53,10 @@ class ProdConfig(object):
     MAIL_USERNAME = 'kidskrafts4u@gmail.com'
     MAIL_PASSWORD = environ.get('email_password')
     STRIPE_SECRET_KEY = environ.get('stripe_secret_key')
+    SESSION_TYPE = 'filesystem'
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024
+    UPLOAD_FOLDER = 'static/images'
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app_config = {
     'DEFAULT': DevConfig,

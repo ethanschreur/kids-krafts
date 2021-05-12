@@ -1,9 +1,9 @@
 """Initializes the flask app."""
 from flask import Flask, render_template, redirect, session, request, flash, jsonify, url_for
-from forms import LoginForm, ContactForm
+from forms import ContactForm
 from models import connect_db, Product, db, Subproduct, Order, Purchase
 from config import app_config
-from .helper import get_two_weeks_options, whichOption, get_last_week, get_first_week, get_new_first_week, get_new_last_week, get_next_month, get_prev_month, get_first_month, get_second_month, get_month_header
+from .helper import get_two_weeks_options, whichOption, get_last_week, get_first_week, get_new_first_week, get_new_last_week, get_next_month, get_prev_month, get_first_month, get_second_month, get_month_header, allowed_file
 from .filters import filter_products, filter_orders, search_orders
 import os
 from flask_mail import Message, Mail
@@ -11,6 +11,8 @@ import random
 import calendar
 import datetime
 import stripe
+import boto3
+from werkzeug.utils import secure_filename
 
 calendar.setfirstweekday(calendar.SUNDAY)
 
@@ -29,19 +31,18 @@ def create_app(config_name):
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
-    """Produce login form or handle login or instant login."""
+    """Show login form or handle login or instant login."""
     if ("seller_email" in session):
         return redirect('/dashboard')
-    form = LoginForm()
-    if (form.validate_on_submit()):
-        email = form.email.data
-        pwd = form.password.data
+    if request.method == 'POST':
+        email = request.form['email']
+        pwd = request.form['password']
         check_email = email.lower().strip() == os.environ.get('seller_email')
         check_password = pwd.lower().strip() == os.environ.get('seller_password')
         if (check_email and check_password):
             session['seller_email'] = os.environ.get('seller_email')
             return redirect('/dashboard')
-    return render_template('seller/login.html', form = form)
+    return render_template('seller/login.html')
 
 @app.route('/logout', methods=['GET'])
 def logout():
@@ -94,10 +95,18 @@ def products():
 def add_product():
     if ("seller_email" not in session):
         return redirect('/login')
+    file = request.files['product_image']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        filename = secure_filename(file.filename)
+        bucket = "kids-krafts"
+        s3 = boto3.client('s3')
+        s3.upload_file(app.config['UPLOAD_FOLDER'] + '/' + filename, bucket, filename)
     new_product = Product(
         name=request.form['product_name'],
         price=float(request.form['product_price']),
-        image_url=request.form['product_image'],
+        image_url = file.filename,
         category=request.form["product_selling_status"])
     db.session.add(new_product)
     db.session.commit()
@@ -114,10 +123,18 @@ def get_product(id):
 def update_product(id):
     if ("seller_email" not in session):
         return redirect('/login')
+    file = request.files['product_image']
     product = Product.query.get_or_404(id)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        filename = secure_filename(file.filename)
+        bucket = "kids-krafts"
+        s3 = boto3.client('s3')
+        s3.upload_file(app.config['UPLOAD_FOLDER'] + '/' + filename, bucket, filename)
+        product.image_url = file.filename,
     product.name = request.form['product_name']
     product.price = request.form['product_price']
-    product.image_url = request.form['product_image']
     product.category = request.form['product_selling_status']
     db.session.add(product)
     db.session.commit()
@@ -136,10 +153,18 @@ def delete_product(id):
 def add_subproduct(id):
     if ("seller_email" not in session):
         return redirect('/login')
+    file = request.files['subproduct_image']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        filename = secure_filename(file.filename)
+        bucket = "kids-krafts"
+        s3 = boto3.client('s3')
+        s3.upload_file(app.config['UPLOAD_FOLDER'] + '/' + filename, bucket, filename)
     new_subproduct = Subproduct(
         product_id = id,
         name = request.form['subproduct_name'],
-        image_url = request.form['subproduct_image']
+        image_url = file.filename,
     )
     db.session.add(new_subproduct)
     db.session.commit()
@@ -149,9 +174,17 @@ def add_subproduct(id):
 def update_subproducts(id, sid):
     if ("seller_email" not in session):
         return redirect('/login')
+    file = request.files['subproduct_image']
     subproduct = Subproduct.query.get(sid)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        filename = secure_filename(file.filename)
+        bucket = "kids-krafts"
+        s3 = boto3.client('s3')
+        s3.upload_file(app.config['UPLOAD_FOLDER'] + '/' + filename, bucket, filename)
+        subproduct.image_url = file.filename
     subproduct.name = request.form['subproduct_name']
-    subproduct.image_url = request.form['subproduct_image']
     db.session.add(subproduct)
     db.session.commit()
     return redirect(f'/products/{id}')
@@ -167,10 +200,11 @@ def delete_subproduct(id, sid):
 
 @app.route('/', methods=['GET'])
 def landing_page():
-    path = os.getcwd() + '/static/links.txt'
-    images_file = open(path, 'r')
-    images = images_file.readlines()
-    images_file.close()
+    images = []
+    for product in Product.query.all():
+        for sub in product.subproducts:
+            if sub.image_url not in images:
+                images.append(sub.image_url)
     return render_template('/customer/landing.html', images=images)
 
 @app.route('/shop')
@@ -215,12 +249,16 @@ def about_page():
 
 @app.route('/cart', methods=['GET'])
 def cart_page():
-    if 'total' not in session:
-        session['total'] = 0
-    total = 0
-    for id in session['cart']:
-        total = total + (float(session['cart'][id]['price']) * float(session['cart'][id]['amount']))
-    session['total'] = round(total, 2)
+    try:
+        if 'total' not in session:
+            session['total'] = 0
+        total = 0
+        for id in session['cart']:
+            total = total + (float(session['cart'][id]['price']) * float(session['cart'][id]['amount']))
+        session['total'] = round(total, 2)
+    except: 
+        session.ckear()
+        return redirect('/shop')
     return render_template('/customer/cart.html', order_details=True)
 
 @app.route('/cart', methods=['POST'])

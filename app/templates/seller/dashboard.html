@@ -3,17 +3,11 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="container d-flex justify-content-center">
-    <span class="d-inline d-lg-none m-3 mt-5">
-        <a class="m-3 btn btn-md btn-success text-black" href="/products">Products</a>
-        <a class="m-3 btn btn-md btn-success text-black" href="/orders">Orders</a>
-    </span>
-</div>
 <div class="row container-fluid">
     <div class="add-product col-lg-4 col-12">
         <div class="p-3 add-product-container border rounded shadow-lg">
         <center><h2>Seller Dashboard</h2></center>
-        <div class="row">
+        <div class="row" style="overflow: auto;">
             <div class="p-3 col-6">
                 <table class="table">
                     <thead>
@@ -74,7 +68,7 @@
     </div>
 </div>
     <div class="view-products col-lg-8 col-12">
-        <div class="p-3 view-products-container border rounded shadow-lg" style="max-height: calc(100vh - 105px);">
+        <div class="p-3 view-products-container border rounded shadow-lg" style="max-height: calc(100vh - 105px); overflow: auto;">
             <center><h2>Product Info</h2></center>
             <div style="overflow: auto;">
             <table class="table">
@@ -91,7 +85,7 @@
             <tbody>
                   <tr class="table-row" data-id={{id}} data-type="product">
                     <td>{{prod_info[id].name}}</td>
-                    <td><img src="{{prod_info[id].image_url}}" class="prod-img"></img></td>
+                    <td><img src="{{'https://kids-krafts.s3.us-east-2.amazonaws.com/' + prod_info[id].image_url}}" class="prod-img"></img></td>
                     <td>{{prod_info[id].amount_ordered}}</td>
                     <td>{{prod_info[id].amount_made}}</td>
                     <td>{{prod_info[id].amount_ordered - prod_info[id].amount_made}}</td>
