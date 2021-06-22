@@ -107,7 +107,7 @@ def add_product():
         name=request.form['product_name'],
         price=float(request.form['product_price']),
         image_url = file.filename,
-        category=request.form["product_selling_status"])
+        category = request.form["product_selling_status"])
     db.session.add(new_product)
     db.session.commit()
     return redirect('/products')
@@ -136,6 +136,7 @@ def update_product(id):
     product.name = request.form['product_name']
     product.price = request.form['product_price']
     product.category = request.form['product_selling_status']
+    product.subtitle = request.form['product_subtitle']
     db.session.add(product)
     db.session.commit()
     return redirect(f'/products/{id}')

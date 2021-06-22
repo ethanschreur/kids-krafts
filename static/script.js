@@ -94,7 +94,7 @@ $('.checkout-button').click(async function(evt) {
 	}
 	if (count === 1) {
 		const stripe = Stripe(
-			'pk_test_51IjncDG7eCWHTgYHTQP30rZivUhfi0DagZW3FDTMmLD4enV4cRWnx8B6ftGWNEvFaiXUdPe5Md9LU4V4RHqo2cMq00byMZcJqY'
+			'pk_live_51IjncDG7eCWHTgYHVowmpLtoiodGq0t1L9GJCmH5mcl2HcGg9U4scrrnNeMNt9OUgErlquFWfWSSta3JkCJnKYkm00drwVoQwF'
 		);
 		let month = '';
 		if (parseInt(selected.id.substring(0, 2), 10) < 15) {

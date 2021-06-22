@@ -13,25 +13,17 @@
                         <center><h2 class="p-3">{{prod.name}}</h2></center>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6 d-flex justify-content-center mb-3">
-                        <img src="{{'https://kids-krafts.s3.us-east-2.amazonaws.com/' +  prod.image_url}}" height="222" width="222">
-                    </div>
-                    <div class="d-none d-sm-inline col-sm-6 d-flex justify-content-start align-items-center my-3">
-                        <ul class="list-group">
-                        {% for sub in prod.subproducts %}
-                            <li class="list-group-item" style="font-size: 20px;">{{sub.name}}</li>
-                        {% endfor %}
-                        </ul>
-                    </div>
-                        <div class="col-sm-12 d-md-5 d-flex justify-content-center p-3">
-                            <div class="d-flex" style="overflow: auto;">
-                            {% for sub in prod.subproducts %}
-                            <div class="d-flex flex-column align-items-center">
-                                <img src="{{'https://kids-krafts.s3.us-east-2.amazonaws.com/' +  sub.image_url}}" height="130" width="130">
-                            </div>
-                            {% endfor %}
-                            </div>
+                    <div class="col-sm-12 d-flex justify-content-center">
+                        <div>
+                        <center><i><h6 class="p-3 pt-1">{{prod.subtitle}}</h6></i></center>
+                        <!-- <li class="list-group-item" style="font-size: 20px;">For fine motor skills</li> -->
                         </div>
+                    </div>
+                    <center>
+                    <div class="col-12 col-sm-6 d-flex justify-content-center mb-3">
+                        <img src="{{'https://kids-krafts.s3.us-east-2.amazonaws.com/' +  prod.image_url}}" height="300">
+                    </div>
+                    </center>
                     <div data-sect="purchase_sect" data-id="{{prod.id}}" data-name="{{prod.name}}" data-image="{{'https://kids-krafts.s3.us-east-2.amazonaws.com/' +  prod.image_url}}" data-price="{{prod.price}}" class="col-12 d-flex align-items-center justify-content-center">
                         <h4 class="mt-3 mx-3">${{'%0.2f'|format(prod.price|float)}}</h4>
                         <a class="add-{{prod.id}} h6 mt-3 btn btn-md btn-primary text-white"><i class="fas fa-plus"></i>  <i class="fas fa-shopping-cart"></i></a>
@@ -91,6 +83,14 @@
                             <option>Not Selling</option>
                             {% endif %}
                         </select>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="form-group col-12">
+                    <label for="product-subtitle">Subtitle</label>
+                    <br>
+                    <input type="text" name="product_subtitle" class="form-control" id="product-subtitle" value="{{prod.subtitle}}"> 
                     </div>
                 </div>
                 <br>

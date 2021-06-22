@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container-fluid d-flex justify-content-center">
-    <div class="row no-gutters bg-white" style="width: 100vw;">
+    <!-- <div class="row no-gutters bg-white" style="width: 100vw;">
         <div class="shop" style="text-align: center; position: relative; height: 0;"><a class="m-2 m-sm-3 btn btn-md btn-primary text-white" href="/shop">Shop</a></div>
         {% for image in images|shuffle %}
         {% if loop.index <= 2 %}
@@ -23,8 +23,7 @@
         </div> 
          {% endif %}
         {% endfor %}
-    </div>
-    </div>  
+    </div>   -->
 </div>
 <center><h2 class="my-5 text-3xl font-extrabold text-center text-gray-900 sm:text-4xl"> ✨ How It Works </h2></center>
 <div class="container d-flex justify-content-center">
@@ -36,18 +35,19 @@
                 </center>
                 <div class="card-body">
                   <h5 class="card-title">Craft Kits</h5>
-                  <p class="card-text">Kits include 3 to 4 crafts, each with a set of instructions.</p>
+                  <p class="card-text">Kits include several crafts, each with a set of instructions.</p>
                 </div>
               </div>
         </div>
         <div class="col-12 col-md-4 d-flex justify-content-center">
             <div class="card mb-3" style="width: 18rem;">
                 <center>
-                    <img class="card-img-top m-3" style="width: calc(100% - 2rem); object-fit: cover; height: 250px;" src="../static/images/craft-supplies.png">
+                    <div style="width: calc(100% - 2rem); object-fit: cover; height: 250px;"> <img class="card-img-top m-3" src="../static/images/craft-supplies.png"></div>
+                   
                 </center>
                 <div class="card-body">
                   <h5 class="card-title">Craft Supplies</h5>
-                  <p class="card-text">Crafts come with all materials except for basic supplies (scissors, glue, coloring utensils).</p>
+                  <p class="card-text">Crafts come with all materials except for basic supplies (i.e. scissors, glue, coloring utensils).</p>
                 </div>
               </div>
         </div>
@@ -69,14 +69,20 @@
 <div class="container-fluid bg-white p-3">
     <center class="my-5"><span class="p-3 h2 bg-white rounded"> People ❤️ Kids Krafts </span></center>
     <div class="row">
-        <div class="col-12 col-lg-6 mb-3 d-flex justify-content-center justify-content-lg-end">
-            <iframe class="mb-3S" src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3D174493807559177%26id%3D166612741680617&width=500&show_text=true&height=485&appId" width="500" height="485" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+        <div class="mb-3 col-12 col-lg-6 pb-3 d-flex justify-content-center justify-content-lg-end">
+           <img src="../../../static/images/feb_kits.jpg" class="quote-and-image">
         </div>
-        <div class="col-12 col-lg-6 d-flex flex-column justify-content-start align-items-center align-items-lg-start">
-            <span class="d-flex flex-column justify-content-start align-items-start">
-                <iframe class="post mb-3 p-3" src="https://www.facebook.com/plugins/comment_embed.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3D175768334098391%26id%3D166612741680617%26comment_id%3D177038710638020%26__cft__[0]%3DAZUFl8vZRy8WPpL7KFcNYEGm68rDcbzJjBqhB2FkW5Cb2dzddoM72oeC_zJbS25c9vEY_Q22IdMcs1JNW1rmvu-sv23KcL6QAn3Dygj3T54M278lkXr9sbONQSV36h8yMhY_GWDFz8jUuODtPB22NOQo%26__tn__%3DR]-R&width=560&include_parent=false&height=134&appId" data-width="100%" height="134" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
-                <iframe class="post mb-3 p-3" src="https://www.facebook.com/plugins/comment_embed.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3D166660578342500%26id%3D166612741680617%26comment_id%3D168951038113454%26__cft__[0]%3DAZVAb0V5awSehmpRhx3tsR7F0335Jjy2ai8T1qY7FNMQRyDZHTfcpfGR1gV8URYsKs1fQihCGDO_CQTq6FYLsuXgcN0Vd7ZHo7Id9q7bIr7rz-N3gUkqxAd6Al6Nrzfj35L8co3qI4OjaKJyeBbIUUZo%26__tn__%3DR]-R&width=560&include_parent=false&height=153&appId" data-width="100%" height="153" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
-                <iframe class= "post p-3" src="https://www.facebook.com/plugins/comment_embed.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3D175768334098391%26id%3D166612741680617%26comment_id%3D175784300763461%26__cft__[0]%3DAZXNWJ1adWPOZOIEa3S0MuOMieXqLlanNPCsWHw8RN_8McvQ5qzPJ5lMQVefmwcflgMNZ81vqAKywbwiHoQX_N4H5Niw7XCB1I5ga7N04nvhon-1x_E9PFMuM6x7RzHnHklowr2FbwTXTHGVegbEPxgM%26__tn__%3DR]-R&width=560&include_parent=false&height=114&appId" data-width="100%" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+        <div class="col-12 col-lg-6 d-flex flex-column align-items-center align-items-lg-start">
+            <span class="quote-and-image pb-3">
+                <ul class="list-group">
+                <li class="list-group-item text-start">She loves doing them and I like having everything ready to go <br><span>-Karen K.</span></li>
+                <br>
+                <li class="list-group-item text-start">CMy daughter did the firetruck and the flower craft this afternoon and said “I love these crafts they make my heart happy” <br>-Michelle K.</li>
+                <br>
+                <li class="list-group-item text-start">THANK YOU Kids Krafts for our FUN afternoon of crafting!! We LOVED our craft kit this month!! <br>-Becca B.</li>
+                <br>
+                <li class="list-group-item text-start">We had so much fun making the taco 😊 Thanks again!<br>-Sara B.</li>
+            </ul>
             </span>
         </div>
     </div>

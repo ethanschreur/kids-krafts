@@ -101,7 +101,9 @@
                     <label for="product-id">Product Name</label>
                     <select id="product-id" name="product_id" class="form-control" required>
                         {% for prod in products %}
+                        {% if prod.category == "Selling" %}
                         <option value="{{prod.id}}">{{prod.name}}</option>
+                        {% endif %}
                         {% endfor %}
                     </select>
                         <br>
