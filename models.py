@@ -19,6 +19,7 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable = False)
     image_url = db.Column(db.Text, nullable = False)
     category = db.Column(db.Text, nullable = False)
+    subtitle = db.Column(db.Text, nullable = True, default="")
 
     # relationships
     purchases = db.relationship('Purchase', backref = "product", cascade = "all, delete-orphan")
