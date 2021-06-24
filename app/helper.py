@@ -91,12 +91,12 @@ def get_new_last_week(last_week, which, two_weeks_options):
     if (0 in last_week):
         new_last_week = []
         count_up = 1
-        for index in range(len(last_week)):
-            if (total_month_days - 5 + index > total_month_days):
+        for index in last_week:
+            if (index == 0):
                 new_last_week.append(count_up)
                 count_up = count_up + 1
             else:
-                new_last_week.append(total_month_days - 5 + index)
+                new_last_week.append(last_week[len(new_last_week)])
         return new_last_week
     else:
         return last_week

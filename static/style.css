@@ -133,6 +133,7 @@ th a {
 		width: 500px;
 	}
 }
+
 @media screen and (max-width: 550px) {
 	.post {
 		width: 300px;
